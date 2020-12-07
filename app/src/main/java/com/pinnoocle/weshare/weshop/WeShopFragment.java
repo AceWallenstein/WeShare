@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
 import androidx.fragment.app.Fragment;
@@ -136,6 +137,10 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                 .setPageMargin(ScreenUtil.dip2px(getContext(), 10), ScreenUtil.dip2px(getContext(), 10))
                 .setPageTransformer(true, new ScaleInTransformer())
                 .setPages(mList);
+    }
+
+    private int dip2px(float dp) {
+        return (int) (dp * getContext().getResources().getDisplayMetrics().density);
     }
 
     private void initRecommend() {

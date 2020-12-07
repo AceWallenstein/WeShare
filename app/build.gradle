@@ -12,6 +12,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        packagingOptions {
+            //解决编译时com.android.builder.merge.DuplicateRelativeFileException: More than one file was found with OS independent path 'META-INF/rxjava.properties'这个错误
+            exclude 'META-INF/rxjava.properties'
+        }
     }
 
     compileOptions {
@@ -52,6 +56,32 @@ dependencies {
     //glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
+    //动态权限申请
+    implementation 'com.github.tbruyelle:rxpermissions:0.12'
 
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+
+//    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.8'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.6.0'
+
+    implementation('cn.qqtheme.framework:WheelPicker:1.5.5') {
+        exclude group: 'com.android.support'
+    }
+
+    implementation 'com.lxj:xpopup-ext:0.0.3'
+//由于扩展库依赖XPopup才能正常使用，所以还必须添加XPopup依赖
+    implementation 'com.lxj:xpopup:2.0.2'
+    //顶部导航栏
+    implementation 'com.androidkun:XTabLayout:1.1.5'
+
+    //画廊banner
+    implementation "com.youth.banner:banner:2.1.0"
+
+    implementation 'com.timmy.tdialog:tdialog:2.1.1'
 
 }

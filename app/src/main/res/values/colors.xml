@@ -4,12 +4,15 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
-    <color name="white1">#F6F6F6</color>
+    <color name="light_white">#FEFBFB</color>
+    <color name="white1">#F7F7F7</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#00000000</color>
+    <color name="transparent73">#73000000</color>
     <color name="juice">#EA5740</color>
     <color name="light_juice">#F4715D</color>
     <color name="grey">#B0B0B0</color>
+    <color name="grey73">#737373</color>
     <color name="light_black">#2D2D2D</color>
     <color name="light_black2">#272727</color>
     <color name="black">#000000</color>

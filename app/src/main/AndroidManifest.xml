@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -19,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".mine.PersonalDataActivity" />
+        <activity android:name=".mine.AccountBalanceActivity" />
+        <activity android:name=".mine.AvailableBalanceActivity" />
+        <activity android:name=".mine.MyCouponsActivity" />
+        <activity android:name=".mine.OpenMembershipActivity" />
+        <activity android:name=".mine.MyCollectionActivity" />
+        <activity android:name=".mine.ShoppingCarActivity" />
+        <activity android:name=".mine.AdviseActivity" />
     </application>
 
 </manifest>

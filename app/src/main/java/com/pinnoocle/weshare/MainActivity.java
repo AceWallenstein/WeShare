@@ -21,7 +21,9 @@ import com.pinnoocle.weshare.widget.NoScrollViewPager;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener, ViewPager.OnPageChangeListener {
@@ -37,6 +39,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         setContentView(R.layout.activity_main);
         initBottomNavigationBar();
         initViewPager();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
+    public void onEvent(String message) {
+        if (message.equals("1")) {
+         viewPager.setCurrentItem(0);
+        }
     }
 
     private void initViewPager() {
