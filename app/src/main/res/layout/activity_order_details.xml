@@ -205,7 +205,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="15dp"
-                    android:background="#E5E5E7" />
+                    android:background="#F7F7F7" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -233,7 +233,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="15dp"
-                    android:background="#E5E5E7" />
+                    android:background="#F7F7F7" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -284,7 +284,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="15dp"
-                    android:background="#E5E5E7" />
+                    android:background="#F7F7F7" />
 
                 <RelativeLayout
                     android:id="@+id/rl_current_money"
@@ -314,7 +314,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="15dp"
-                    android:background="#E5E5E7" />
+                    android:background="#F7F7F7" />
 
                 <RelativeLayout
                     android:id="@+id/rl_pay_mode"
@@ -345,36 +345,42 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"
         android:background="@color/white"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/tv_go_buy"
             android:background="@drawable/bg_cancel"
             android:gravity="center"
-            android:padding="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
             android:text="取消"
-            android:layout_toStartOf="@id/tv_go_buy"
-            android:layout_centerVertical="true"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
         <TextView
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
             android:id="@+id/tv_go_buy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_go_buy_1"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="立即付款"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bg_go_buy_1"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:text="立即付款"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
