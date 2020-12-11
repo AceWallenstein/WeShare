@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_add_shop_success"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    >
+    <ImageView
+        android:src="@mipmap/icon_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加入购物车成功"
+        android:textColor="@color/white"
+        android:textSize="13sp"/>
+
+</LinearLayout>

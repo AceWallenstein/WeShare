@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:background="@color/white"
+    android:layout_marginBottom="10dp"
     android:padding="10dp">
 
     <CheckBox
@@ -13,21 +15,22 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:button="@drawable/check_selector"
-        tools:ignore="RtlHardcoded" />
+         />
+<!--    android:ignore="RtlHardcoded"-->
 
     <ImageView
         android:id="@+id/mGoodsIconIv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/mCheckedCb"
         android:scaleType="fitXY"
-        tools:ignore="ContentDescription,RtlHardcoded"
-        tools:src="@mipmap/sample" />
+        android:src="@mipmap/sample" />
 
     <TextView
-        tools:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
+        android:layout_alignTop="@id/mGoodsIconIv"
+        android:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
         android:id="@+id/mGoodsDescTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,10 +41,10 @@
         android:maxLines="2"
         android:textColor="@color/light_black"
         android:textSize="12sp"
-        tools:ignore="RtlHardcoded" />
+ />
 
     <TextView
-        tools:text="杏色；xs"
+        android:text="杏色；xs"
         android:id="@+id/mGoodsSkuTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,10 +53,10 @@
         android:layout_marginTop="12dp"
         android:textSize="12sp"
         android:textColor="@color/grey"
-        tools:ignore="RtlHardcoded" />
+      />
 
     <TextView
-        tools:text="￥299.00"
+        android:text="￥299.00"
         android:id="@+id/mGoodsPriceTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,13 +65,16 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/orange"
         android:textSize="14sp"
-        tools:ignore="RtlHardcoded" />
+ />
 
     <ren.qinc.numberbutton.NumberButton
+        app:buttonWidth="30dp"
+        app:textWidth ="50dp"
+        app:textSize="4sp"
         android:id="@+id/mGoodsCountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/mGoodsPriceTv"
-        tools:ignore="RtlHardcoded" />
+      />
 </RelativeLayout>

@@ -20,6 +20,7 @@ import com.pedaily.yc.ycdialoglib.dialog.select.CustomSelectDialog;
 import com.pinnoocle.weshare.MainActivity;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.utils.StatusBarUtil;
 import com.pinnoocle.weshare.widget.RoundImageView;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
@@ -32,7 +33,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.qqtheme.framework.picker.OptionPicker;
 import cn.qqtheme.framework.widget.WheelView;
-
+/*
+个人资料
+ */
 public class PersonalDataActivity extends BaseActivity {
 
 
@@ -51,6 +54,7 @@ public class PersonalDataActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         initTransparent();
+        StatusBarUtil.StatusBarLightMode(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_personal_data);
         ButterKnife.bind(this);

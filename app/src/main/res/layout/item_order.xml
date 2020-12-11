@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_order"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -14,7 +13,7 @@
         android:padding="10dp">
 
         <TextView
-            tools:text="卖家已发货"
+            android:text="卖家已发货"
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +35,7 @@
         android:padding="10dp">
 
         <TextView
-            tools:text="2019-10-28  14:00"
+            android:text="2019-10-28  14:00"
             android:id="@+id/tv_order_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +47,7 @@
             android:id="@+id/tv_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="订单号：2019102848100549"
+            android:text="订单号：2019102848100549"
             android:layout_toStartOf="@id/tv_order_time"
             android:textColor="@color/grey73"
             android:textSize="11sp" />
@@ -63,7 +62,7 @@
         android:padding="15dp">
 
         <ImageView
-            tools:src="@mipmap/sample"
+            android:src="@mipmap/sample"
             android:id="@+id/iv_shop"
             android:layout_width="80dp"
             android:layout_height="80dp" />
@@ -76,7 +75,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/tv_money"
             android:layout_toRightOf="@id/iv_shop"
-            tools:text="轻熟风垂感先手首要系带翻领双排扣过膝风衣外套女"
+            android:text="轻熟风垂感先手首要系带翻领双排扣过膝风衣外套女"
             android:textColor="@color/light_black"
             android:textSize="12sp" />
         <TextView
@@ -89,7 +88,7 @@
             android:layout_toLeftOf="@id/tv_money"
             android:layout_toRightOf="@id/iv_shop"
             android:layout_below="@id/tv_title"
-            tools:text="杏色；xs"
+            android:text="杏色；xs"
             android:textColor="#B0B0B0"
             android:textSize="12sp" />
 

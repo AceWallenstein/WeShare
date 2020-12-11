@@ -14,7 +14,7 @@ import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
+//导航栏菜单adapter
 public class MenuAdapter extends BaseAdapter<String, MenuAdapter.VH> {
 
 

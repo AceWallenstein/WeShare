@@ -2,9 +2,11 @@ package com.pinnoocle.weshare.adapter;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.allenliu.badgeview.BadgeFactory;
+import com.allenliu.badgeview.BadgeView;
 import com.pinnoocle.weshare.R;
 
 import java.util.ArrayList;
@@ -50,11 +54,11 @@ public class GridOrderAdapter extends BaseAdapter {
         void onItemClick(int position);
     }
 
-    private OnItemClickListener mOnItemClickListener;
-
-    public void setItemClickListener(OnItemClickListener mOnItemClickListener) {
-        this.mOnItemClickListener = mOnItemClickListener;
-    }
+//    private OnItemClickListener mOnItemClickListener;
+//
+//    public void setItemClickListener(OnItemClickListener mOnItemClickListener) {
+//        this.mOnItemClickListener = mOnItemClickListener;
+//    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -73,22 +77,47 @@ public class GridOrderAdapter extends BaseAdapter {
         holder.text.setText(dataList.get(position).get("text").toString());
         holder.image.setImageResource((Integer) dataList.get(position).get("image"));
 
+//        if (num > 0) {
+//            holder.tvDot.setVisibility(View.VISIBLE);
+//            if (num <= 99) {
+//                holder.tvDot.setTextSize(8);
+//                holder.tvDot.setText(num + "");
+//            } else {
+//                holder.tvDot.setTextSize(7);
+////                holder.tvDot.setText("99+");
+//                SpannableString spannableString=new SpannableString("99+");
+//                //将+用作上标显示
+//                spannableString.setSpan(new SuperscriptSpan(),2,3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                holder.tvDot.setText(spannableString);
+//            }
+//        } else {
+//            holder.tvDot.setVisibility(View.GONE);
+//        }
+
         if (num > 0) {
             holder.tvDot.setVisibility(View.VISIBLE);
             if (num <= 99) {
-                holder.tvDot.setTextSize(8);
-                holder.tvDot.setText(num + "");
+                BadgeFactory.createOval(context)
+                        .setWidthAndHeight(12, 12)
+                        .setTextSize(8).setBadgeGravity(Gravity.CENTER)
+                        .setBadgeCount(num)
+                        .bind(holder.tvDot);
+
             } else {
-                holder.tvDot.setTextSize(7);
-//                holder.tvDot.setText("99+");
-                SpannableString spannableString=new SpannableString("99+");
+                SpannableString spannableString = new SpannableString("99+");
                 //将+用作上标显示
-                spannableString.setSpan(new SuperscriptSpan(),2,3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.tvDot.setText(spannableString);
+                spannableString.setSpan(new SuperscriptSpan(), 2, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                BadgeFactory.createOval(context)
+                        .setWidthAndHeight(12, 12)
+                        .setTextSize(7).setBadgeGravity(Gravity.CENTER)
+                        .setBadgeCount(spannableString+"")
+                        .bind(holder.tvDot);
             }
         } else {
             holder.tvDot.setVisibility(View.GONE);
         }
+        BadgeFactory.createOval(context).setWidthAndHeight(12, 12).setTextSize(8).setBadgeGravity(Gravity.CENTER).setBadgeCount(1).bind(holder.tvDot);
+
         return convertView;
     }
 

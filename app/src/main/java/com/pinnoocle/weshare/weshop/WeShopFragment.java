@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.weshop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,10 +25,13 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.adapter.GoodsAdapter;
 import com.pinnoocle.weshare.adapter.MenuAdapter;
 import com.pinnoocle.weshare.adapter.RecommendAdapter;
+import com.pinnoocle.weshare.bean.GoodsBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.ScreenUtil;
 import com.pinnoocle.weshare.widget.TagsGridView;
 import com.to.aboomy.banner.Banner;
@@ -43,7 +47,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class WeShopFragment extends Fragment implements AdapterView.OnItemClickListener {
+/*
+你我共享
+ */
+public class WeShopFragment extends Fragment implements AdapterView.OnItemClickListener, BaseAdapter.OnItemClickListener {
 
     @BindView(R.id.ed_search)
     EditText edSearch;
@@ -114,7 +121,12 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         menuAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemViewClick(View view, int position) {
-                ToastUtils.showToast(menus.get(position));
+                if (position == 0)
+                    return;
+                Intent intent = new Intent(getContext(), GoodsListActivity.class);
+                intent.putExtra("title", menus.get(position));
+                getActivity().startActivity(intent);
+
             }
         });
         rvMenus.setAdapter(menuAdapter);
@@ -163,12 +175,23 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     private void initGoodsList() {
         rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rvFavorite.setLayoutManager(new GridLayoutManager(getContext(), 2));
         RecommendAdapter recommendAdapter = new RecommendAdapter(getContext());
+        GoodsAdapter goodsAdapter = new GoodsAdapter(getContext());
         RecommendBean bean = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
         RecommendBean bean1 = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
+
+        GoodsBean goodsBean = new GoodsBean("居家日用百货 任选5款blablablablablabla...", "14.50", "15.51", "", "172");
         List<RecommendBean> list = new ArrayList<>();
+        List<GoodsBean> list_ = new ArrayList<>();
         list.add(bean);
         list.add(bean1);
+        list_.add(goodsBean);
+        list_.add(goodsBean);
+        list_.add(goodsBean);
+        list_.add(goodsBean);
+        list_.add(goodsBean);
+        list_.add(goodsBean);
         recommendAdapter.setData(list);
         recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
@@ -177,6 +200,9 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
             }
         });
         rvRecommend.setAdapter(recommendAdapter);
+        goodsAdapter.setData(list_);
+        goodsAdapter.setOnItemClickListener(this);
+        rvFavorite.setAdapter(goodsAdapter);
     }
 
     @Override
@@ -187,6 +213,16 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         } else if (position == 3) {
         } else if (position == 4) {
         }
+    }
+
+    @Override
+    public void onItemViewClick(View view, int position) {
+        if(view.getId()==R.id.iv_shop_car){
+            ToastUtils.showToast("加入购物车");
+            return;
+        }
+        Intent intent = new Intent(getContext(), GoodsDetailActivity.class);
+        startActivity(intent);
     }
 
     public class ImageHolderCreator implements com.to.aboomy.banner.HolderCreator {

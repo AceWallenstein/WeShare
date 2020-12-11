@@ -83,5 +83,18 @@ dependencies {
     implementation "com.youth.banner:banner:2.1.0"
 
     implementation 'com.timmy.tdialog:tdialog:2.1.1'
+    //小圆点
+    implementation 'com.allenliu.badgeview:library:1.1.1'
+    //刷新控件
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+    implementation 'com.github.yuruiyin:AppbarLayoutBehavior:v1.0.2'
+    //标签
+    implementation  'com.hyman:flowlayout-lib:1.1.2'
+    //购物车加减
+    implementation 'ren.qinc.numberbutton:numberbutton:0.0.1'
+    //评分控件
+    implementation 'com.github.KaelLi1989:NiceRatingBar:1.0.0'
+
 
 }

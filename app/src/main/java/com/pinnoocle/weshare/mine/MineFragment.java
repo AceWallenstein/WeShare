@@ -1,5 +1,6 @@
 package com.pinnoocle.weshare.mine;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.GridOrderAdapter;
+import com.pinnoocle.weshare.common.Type;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.SaveImageUtils;
 import com.pinnoocle.weshare.widget.RoundImageView;
@@ -43,6 +45,9 @@ import butterknife.Unbinder;
 
 import static com.luck.picture.lib.thread.PictureThreadUtils.runOnUiThread;
 
+/*
+个人中心
+ */
 public class MineFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_head)
@@ -120,6 +125,34 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
         gridOrderAdapter = new GridOrderAdapter(getActivity(), data_list, num);
         gridView.setAdapter(gridOrderAdapter);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), OrderActivity.class);
+                switch (position) {
+                    case 0: //待付款
+                        intent.putExtra("type", Type.Payment);
+                        startActivity(intent);
+                        break;
+                    case 1: //待发货
+                        intent.putExtra("type", Type.Delivery);
+                        startActivity(intent);
+                        break;
+                    case 2: //待收货
+                        intent.putExtra("type", Type.Received);
+                        startActivity(intent);
+                        break;
+                    case 3: //团购
+                        intent.putExtra("type", Type.GroupPurchase);
+                        startActivity(intent);
+                        break;
+                    case 4: //抽奖
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     public List<Map<String, Object>> getData() {
@@ -166,7 +199,7 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
 
-    @OnClick({R.id.tv_modification_personal_data, R.id.ll_available_balance, R.id.ll_account_balance, R.id.ll_my_coupons, R.id.iv_membership_area})
+    @OnClick({R.id.tv_modification_personal_data, R.id.ll_available_balance, R.id.ll_account_balance, R.id.ll_my_coupons, R.id.iv_membership_area, R.id.tv_all_order})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_available_balance:
@@ -183,7 +216,12 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 break;
             case R.id.tv_modification_personal_data:
                 ActivityUtils.startActivity(getActivity(), PersonalDataActivity.class);
+                break;
 
+            case R.id.tv_all_order:
+                Intent intent = new Intent(getContext(), OrderActivity.class);
+                intent.putExtra("type", Type.All);
+                startActivity(intent);
                 break;
         }
     }
@@ -195,7 +233,7 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 ActivityUtils.startActivity(getActivity(), MyCollectionActivity.class);
                 break;
             case 1://购物车
-                ActivityUtils.startActivity(getActivity(), ShoppingCarActivity.class);
+                ActivityUtils.startActivity(getActivity(), ShopCarActivity.class);
                 break;
             case 2://邀请推广
                 showPopUpWindow();
@@ -204,6 +242,12 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 break;
             case 4://建议
                 ActivityUtils.startActivity(getActivity(), AdviseActivity.class);
+                break;
+            case 5://朋友圈
+                ActivityUtils.startActivity(getActivity(), MyFriendsActivity.class);
+                break;
+            case 6://收货地址
+                ActivityUtils.startActivity(getActivity(), AddressActivity.class);
                 break;
 
         }
@@ -229,7 +273,7 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                                         currentPosition = position - 1;
                                         //图片加载自己实现
                                         Glide.with(holder.itemView)
-                                                .load(data)
+                                                .load(R.mipmap.delete_9)
                                                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                                                 .into(holder.imageView);
                                     }
@@ -272,4 +316,6 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 .create()   //创建TDialog
                 .show();    //展示
     }
+
+
 }

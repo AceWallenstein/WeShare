@@ -2,7 +2,12 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="2dp"
+    app:cardCornerRadius="6dp"
+    android:layout_margin="5dp"
+>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -12,23 +17,28 @@
 
         <ImageView
             android:id="@+id/iv_goods_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="172dp"
+            android:layout_height="152dp" />
 
         <TextView
+            android:padding="4dp"
+            android:layout_marginStart="5dp"
             android:id="@+id/tv_goods_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/light_black"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             tools:text="居家日用百货 任选5款..." />
 
         <RelativeLayout
+            android:layout_marginStart="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/goods_price"
+                android:id="@+id/tv_membership_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/juice"
@@ -40,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/goods_price"
+                android:layout_toEndOf="@id/tv_membership_price"
                 android:textColor="@color/grey"
                 android:textSize="12sp"
                 tools:text="非会员￥15.80" />
@@ -48,10 +58,13 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/tv_payment_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,8 +72,9 @@
                 android:textSize="12sp"
                 tools:text="128人付款" />
             <ImageView
-                android:layout_centerVertical="true"
+                android:padding="10dp"
                 android:src="@mipmap/shopping_cart_empty"
+                android:layout_marginEnd="8dp"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/iv_shop_car"
                 android:layout_width="wrap_content"

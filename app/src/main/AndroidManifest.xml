@@ -28,8 +28,16 @@
         <activity android:name=".mine.MyCouponsActivity" />
         <activity android:name=".mine.OpenMembershipActivity" />
         <activity android:name=".mine.MyCollectionActivity" />
-        <activity android:name=".mine.ShoppingCarActivity" />
+        <activity android:name=".mine.ShopCarActivity" />
         <activity android:name=".mine.AdviseActivity" />
+        <activity android:name=".mine.MyFriendsActivity" />
+        <activity android:name=".weshop.GoodsListActivity" />
+        <activity android:name=".mine.AddressActivity" />
+        <activity android:name=".mine.AddAddressActivity" />
+        <activity android:name=".weshop.GoodsDetailActivity" />
+        <activity android:name=".mine.OrderDetailsActivity" />
+        <activity android:name=".mine.OrderActivity" />
+        <activity android:name=".mine.OrderConfirmActivity" />
     </application>
 
 </manifest>

@@ -6,7 +6,9 @@ import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.common.BaseActivity;
 
 import butterknife.ButterKnife;
-
+/*
+账户余额
+ */
 public class AccountBalanceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         initTransparent();

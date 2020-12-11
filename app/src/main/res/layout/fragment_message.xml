@@ -48,7 +48,7 @@
             android:layout_alignBottom="@id/iv_sys_message"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/iv_sys_message"
-            android:text="系统消息"
+            android:text="6条未读消息"
             android:textColor="@color/grey"
             android:textSize="13sp" />
 
@@ -91,7 +91,7 @@
             android:layout_alignBottom="@id/iv_shop_message"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/iv_shop_message"
-            android:text="系统消息"
+            android:text="10条未读消息"
             android:textColor="@color/grey"
             android:textSize="13sp" />
 
@@ -134,7 +134,7 @@
             android:layout_alignBottom="@id/iv_customer_service"
             android:layout_marginStart="20dp"
             android:layout_toEndOf="@id/iv_customer_service"
-            android:text="系统消息"
+            android:text="全部已读"
             android:textColor="@color/grey"
             android:textSize="13sp" />
 
@@ -145,6 +145,49 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/arrow_right" />
     </RelativeLayout>
+    <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/rv_chat_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_chat_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/chat_room" />
+
+        <TextView
+            android:id="@+id/tv_chat_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/iv_chat_room"
+            android:text="聊天室"
+            android:textColor="@color/light_black2"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/iv_chat_room"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/iv_chat_room"
+            android:text="全部已读"
+            android:textColor="@color/grey"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/arrow_right" />
+    </RelativeLayout>
+
 
 
 </LinearLayout>

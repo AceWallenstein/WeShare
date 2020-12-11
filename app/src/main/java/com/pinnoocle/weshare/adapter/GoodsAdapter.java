@@ -10,14 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.GoodsBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsAdapter extends BaseAdapter<RecommendBean, GoodsAdapter.VH> {
+public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
 
 
 
@@ -34,6 +36,13 @@ public class GoodsAdapter extends BaseAdapter<RecommendBean, GoodsAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
+        holder.tvMemberPrice.setText("￥"+mDatas.get(position).getNonMembershipPrice());
+        holder.tvNonMemberPrice.setText("非会员￥"+mDatas.get(position).getMembershipPrice());
+        holder.tvPaymentNum.setText(mDatas.get(position).getPaymentsNum()+"人付款");
+        Glide.with(mContext).load(R.mipmap.deletepic).centerCrop().into(holder.ivGoodsPic);
+
+        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
+        holder.ivShopCar.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
     }
 
     @Override
@@ -48,8 +57,8 @@ public class GoodsAdapter extends BaseAdapter<RecommendBean, GoodsAdapter.VH> {
         ImageView ivGoodsPic;
         @BindView(R.id.tv_goods_title)
         TextView tvGoodsTitle;
-        @BindView(R.id.goods_price)
-        TextView goodsPrice;
+        @BindView(R.id.tv_membership_price)
+        TextView tvMemberPrice;
         @BindView(R.id.tv_non_member_price)
         TextView tvNonMemberPrice;
         @BindView(R.id.tv_payment_num)

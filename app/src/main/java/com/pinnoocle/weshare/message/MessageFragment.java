@@ -11,7 +11,7 @@ import com.pinnoocle.weshare.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
+//消息
 public class MessageFragment extends Fragment {
     private Unbinder unbinder;
 
