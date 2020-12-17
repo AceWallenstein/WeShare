@@ -123,8 +123,13 @@ public class OrderDetailsActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.iv_back)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.iv_back, R.id.tv_cancel})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+            case R.id.tv_cancel:
+                finish();
+                break;
+        }
     }
 }

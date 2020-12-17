@@ -2,6 +2,7 @@ package com.pinnoocle.weshare.mine;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.pinnoocle.weshare.utils.StatusBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /*
 我的朋友圈
@@ -22,6 +24,8 @@ public class MyFriendsActivity extends BaseActivity {
     ImageView ivBack;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
 
     protected void onCreate(Bundle savedInstanceState) {
         initWhite();
@@ -36,5 +40,10 @@ public class MyFriendsActivity extends BaseActivity {
         FriendsAdapter adapter = new FriendsAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onViewClicked() {
+        finish();
     }
 }

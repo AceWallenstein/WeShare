@@ -50,6 +50,8 @@ public class OrderAdapter extends BaseAdapter<OrderBean, OrderAdapter.VH> {
 
                 holder.tvLogistics.setText("查看物流");
                 holder.tvReceiving.setText("确认收货");
+                holder.tvLogistics.setOnClickListener(v -> {});
+                holder.tvReceiving.setOnClickListener(v -> {});
                 break;
             case 1:
                 holder.tvStatus.setText("待付款");
@@ -63,11 +65,15 @@ public class OrderAdapter extends BaseAdapter<OrderBean, OrderAdapter.VH> {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
                 holder.tvLogistics.setLayoutParams(params);
+                holder.tvLogistics.setOnClickListener(v -> {});
                 break;
             case 3:         //已完成
                 holder.tvStatus.setText("已完成");
                 holder.tvLogistics.setText("申请售后");
                 holder.tvReceiving.setText("评价");
+                holder.tvLogistics.setOnClickListener(v -> {});
+                holder.tvReceiving.setOnClickListener(v -> {});
+
                 break;
 
         }

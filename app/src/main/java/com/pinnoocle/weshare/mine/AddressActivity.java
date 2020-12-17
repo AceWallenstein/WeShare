@@ -77,6 +77,9 @@ public class AddressActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && requestCode == 1) {
+            if (data == null) {
+                return;
+            }
             Serializable serializable = data.getSerializableExtra("addressBean");
             AddressBean addressBean = (AddressBean) serializable;
             list.add(addressBean);
