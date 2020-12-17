@@ -43,7 +43,7 @@ public class OrderAdapter extends BaseAdapter<OrderBean, OrderAdapter.VH> {
      */
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
+        holder.itemView.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v, position,mDatas.get(position)));
         switch (mDatas.get(position).type) {
             case 0:             //卖家已发货
                 holder.tvStatus.setText("卖家已发货");

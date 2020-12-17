@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.OrderAdapter;
 import com.pinnoocle.weshare.bean.OrderBean;
+import com.pinnoocle.weshare.common.BaseAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
@@ -24,7 +25,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener, OrderAdapter.OnItemClickListener {
+public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener {
     RecyclerView recycleView;
     //    private DataRepository dataRepository;
     SmartRefreshLayout refresh;
@@ -92,7 +93,16 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
 
         orderAdapter.setData(list);
         recycleView.setAdapter(orderAdapter);
-        orderAdapter.setOnItemClickListener(this);
+        orderAdapter.setmOnItemDataClickListener(new BaseAdapter.OnItemDataClickListener<OrderBean>() {
+            @Override
+            public void onItemViewClick(View view, int position, OrderBean o) {
+                int type = o.type;
+                Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+                intent.putExtra("type", type);
+////        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
+                startActivity(intent);
+            }
+        });
 
 //        order(page);
         refresh.setOnRefreshLoadMoreListener(this);
@@ -141,12 +151,13 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
 //        order(page);
     }
 
-    @Override
-    public void onItemViewClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
-//        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
-        startActivity(intent);
-    }
+//    @Override
+//    public void onItemViewClick(View view, int position) {
+//        Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+//        intent.putExtra("type",type);
+////        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
+//        startActivity(intent);
+//    }
 
     @Override
     public void onDestroyView() {

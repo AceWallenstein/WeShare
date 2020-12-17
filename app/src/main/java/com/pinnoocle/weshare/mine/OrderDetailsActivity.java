@@ -7,9 +7,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.adapter.OrderConfirmAdapter;
+import com.pinnoocle.weshare.bean.OrderBean;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 
@@ -66,6 +69,9 @@ public class OrderDetailsActivity extends BaseActivity {
     TextView tvCancel;
     @BindView(R.id.tv_go_buy)
     TextView tvGoBuy;
+    @BindView(R.id.rl_pay)
+    RelativeLayout rl_pay;
+    private OrderConfirmAdapter orderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +83,44 @@ public class OrderDetailsActivity extends BaseActivity {
         initView();
     }
 
-    private void initView() {
+    /*
 
+        } else if (type.equals("待付款")) {
+            list.add(new OrderBean(1));
+        } else if (type.equals("待发货")) {
+            list.add(new OrderBean(2));
+        } else if (type.equals("待收货")) {
+            list.add(new OrderBean(0));
+        } else if (type.equals("待评价")) {
+            list.add(new OrderBean(3));
+        } else if (type.equals("团购订单")) {
+     */
+    private void initView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        orderAdapter = new OrderConfirmAdapter(this);
+        recyclerView.setAdapter(orderAdapter);
+        int type = getIntent().getIntExtra("type", 1);
+        if (type == 1) {
+        } else if (type == 2) {
+            tvOrderState.setText("已付款，待发货");
+            tvOrderLimitTime.setText("订单号：2019102848100549");
+//            tvGoBuy.setVisibility(View.GONE);
+//            tvCancel.setVisibility(View.GONE);
+            rl_pay.setVisibility(View.GONE);
+        } else if (type == 0) {
+            tvOrderState.setText("卖家已发货");
+            tvOrderLimitTime.setText("订单号：2019102848100549");
+//            tvGoBuy.setVisibility(View.GONE);
+//            tvCancel.setVisibility(View.GONE);
+            rl_pay.setVisibility(View.GONE);
+
+        } else if (type == 3) {
+            tvOrderState.setText("已完成");
+            tvOrderLimitTime.setText("订单号：2019102848100549");
+//            tvGoBuy.setVisibility(View.GONE);
+//            tvCancel.setVisibility(View.GONE);
+            rl_pay.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.iv_back)
