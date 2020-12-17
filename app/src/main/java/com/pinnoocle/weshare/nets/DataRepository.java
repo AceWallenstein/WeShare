@@ -39,4 +39,10 @@ public class DataRepository implements RemotDataSource {
     public void homePage(Map<String, String> queryMap, getCallback callback) {
         mRemoteDataSource.homePage(queryMap, callback);
     }
+
+    @Override
+    public void recommend(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.recommend(queryMap, callback);
+
+    }
 }

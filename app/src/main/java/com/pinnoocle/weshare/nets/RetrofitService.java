@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.nets;
 
 import com.pinnoocle.weshare.bean.HomeBean;
+import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.bean.UserLogin;
 
 import java.util.Map;
@@ -22,7 +23,7 @@ public interface RetrofitService {
     // 首页
     @POST("api.html")
     Observable<HomeBean> homePage(@QueryMap Map<String, String> queryMap);
-    // 首页
+    // 首页猜你喜欢
     @POST("api.html")
-    Observable<HomeBean> recommend(@QueryMap Map<String, String> queryMap);
+    Observable<RecommendBean> recommend(@QueryMap Map<String, String> queryMap);
 }

@@ -4,6 +4,7 @@ package com.pinnoocle.weshare.nets;
 import android.content.Context;
 
 import com.pinnoocle.weshare.bean.HomeBean;
+import com.pinnoocle.weshare.bean.RecommendBean;
 
 import java.util.Map;
 
@@ -42,6 +43,28 @@ public class RemotDataSourceImpl implements RemotDataSource {
 
                     @Override
                     public void onNext(HomeBean s) { // 请求成功
+                        callback.onSuccess(s);
+                    }
+                });
+    }
+
+    @Override
+    public void recommend(Map<String, String> queryMap, getCallback callback) {
+        Observable<RecommendBean> observable = RetrofitHelper.getInstance(mContext).getServer().recommend(queryMap);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RecommendBean>() {
+                    @Override
+                    public void onCompleted() { // 完成请求后
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) { // 异常处理
+                        callback.onFailure(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(RecommendBean s) { // 请求成功
                         callback.onSuccess(s);
                     }
                 });

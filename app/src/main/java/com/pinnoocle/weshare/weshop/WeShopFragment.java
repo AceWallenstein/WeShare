@@ -13,12 +13,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,20 +29,24 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.adapter.GoodsAdapter;
 import com.pinnoocle.weshare.adapter.MenuAdapter;
 import com.pinnoocle.weshare.adapter.RecommendAdapter;
-import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.ScreenUtil;
 import com.pinnoocle.weshare.widget.TagsGridView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 import com.to.aboomy.banner.Banner;
+import com.to.aboomy.banner.HolderCreator;
 import com.to.aboomy.banner.IndicatorView;
 import com.to.aboomy.banner.ScaleInTransformer;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +60,7 @@ import butterknife.Unbinder;
 /*
 你我共享
  */
-public class WeShopFragment extends Fragment implements AdapterView.OnItemClickListener, BaseAdapter.OnItemClickListener {
+public class WeShopFragment extends Fragment implements AdapterView.OnItemClickListener, BaseAdapter.OnItemClickListener, OnRefreshLoadMoreListener {
 
     @BindView(R.id.ed_search)
     EditText edSearch;
@@ -70,6 +74,18 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     RecyclerView rvRecommend;
     @BindView(R.id.rv_favorite)
     RecyclerView rvFavorite;
+    @BindView(R.id.iv_menu)
+    ImageView ivMenu;
+    @BindView(R.id.tv_recommend)
+    TextView tvRecommend;
+    @BindView(R.id.iv_right)
+    ImageView ivRight;
+    @BindView(R.id.rl_recommend)
+    RelativeLayout rlRecommend;
+    @BindView(R.id.tv_favorite)
+    TextView tvFavorite;
+    @BindView(R.id.refresh)
+    SmartRefreshLayout refresh;
 
 
     private Unbinder unbinder;
@@ -80,9 +96,15 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐"};
 
-    List<String> menus = new ArrayList<>();
+    List<HomeBean.DataBeanXX.CategoryBean> menus = new ArrayList<>();
     private SimpleAdapter sim_adapter;
     private ArrayList<Map<String, Object>> data_list;
+    private DataRepository dataRepository;
+    private MenuAdapter menuAdapter;
+    private int page = 1;
+    private RecommendAdapter recommendAdapter;
+    private List<RecommendBean.DataBean.ListBean> recommendList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,13 +123,12 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
 
-
     private void initView() {
         initMenus();
         grid();
-        initBanner();
         initRecommend();
-        initGoodsList();
+        refresh.setOnRefreshLoadMoreListener(this);
+//        initGoodsList();
         gridView.setOnItemClickListener(this);
         edSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -132,15 +153,79 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         });
 
     }
-    private void initData() {
 
+    private void initData() {
+        dataRepository = Injection.dataRepository(getContext());
+        homePage();
+        recommend();
+    }
+
+
+    private void homePage() {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", "de6d8a1d7ae1116e6ecc1a6704934a84");
+        map.put("app.index", "app.index");
+        map.put("site_token", "123456");
+        dataRepository.homePage(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                HomeBean homeBean = (HomeBean) data;
+                if (homeBean.isStatus()) {
+                    menus = homeBean.getData().getCategory();
+                    menuAdapter.setData(menus);
+                    if (homeBean.getData().getBanner().isStatus()) {
+                        List<HomeBean.DataBeanXX.BannerBean.DataBean.ListBean> list = homeBean.getData().getBanner().getData().getList();
+                        initBanner(list);
+                    }
+                    if (homeBean.getData().getTqm_list().isStatus()) {
+
+                    }
+
+                }
+            }
+        });
+    }
+
+    private void recommend() {
+        refresh.setNoMoreData(false);
+        Map<String, String> map = new HashMap<>();
+        map.put("method", "goods.getlist");
+        map.put("site_token", "123456");
+        map.put("where", "{\"hot\":1,\"is_tqm\":1}");
+        map.put("page", page + "");
+        dataRepository.recommend(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                refresh.finishRefresh(false);
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                refresh.finishRefresh();
+                RecommendBean recommendBean = (RecommendBean) data;
+                if (recommendBean.isStatus()) {
+                    if (recommendBean.getData().getPage() <= recommendBean.getData().getTotal_page()) {
+                        recommendList.addAll(recommendBean.getData().getList());
+                        recommendAdapter.setData(recommendList);
+                        refresh.finishLoadMore();
+                    }else {
+                        refresh.finishLoadMoreWithNoMoreData();
+                    }
+                }
+            }
+        });
     }
 
 
     private void initMenus() {
 
         rvMenus.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        MenuAdapter menuAdapter = new MenuAdapter(getContext());
+        menuAdapter = new MenuAdapter(getContext());
 //        menuAdapter.setData(menus);
         menuAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
@@ -148,7 +233,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                 if (position == 0)
                     return;
                 Intent intent = new Intent(getContext(), GoodsListActivity.class);
-                intent.putExtra("title", menus.get(position));
+//                intent.putExtra("title", menus.get(position));
                 getActivity().startActivity(intent);
 
             }
@@ -157,19 +242,31 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
 
-    private void initBanner() {
+    private void initBanner(List<HomeBean.DataBeanXX.BannerBean.DataBean.ListBean> list) {
         List<String> mList = new ArrayList<>();
-        mList.add("https://img.zcool.cn/community/013de756fb63036ac7257948747896.jpg");
-        mList.add("https://img.zcool.cn/community/01639a56fb62ff6ac725794891960d.jpg");
-        mList.add("https://img.zcool.cn/community/01270156fb62fd6ac72579485aa893.jpg");
-        mList.add("https://img.zcool.cn/community/01233056fb62fe32f875a9447400e1.jpg");
-        mList.add("https://img.zcool.cn/community/016a2256fb63006ac7257948f83349.jpg");
-
+        for (HomeBean.DataBeanXX.BannerBean.DataBean.ListBean listBean : list) {
+            mList.add(listBean.getImg());
+        }
         IndicatorView qyIndicator = new IndicatorView(getContext())
                 .setIndicatorColor(Color.DKGRAY)
                 .setIndicatorSelectorColor(Color.WHITE);
         banner.setIndicator(qyIndicator)
-                .setHolderCreator(new ImageHolderCreator())
+                .setHolderCreator(new ImageHolderCreator() {
+                    @Override
+                    public View createView(Context context, int index, Object o) {
+                        ImageView iv = new ImageView(context);
+                        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                        Glide.with(iv).load(o).apply(new RequestOptions().transform(new RoundedCorners(ScreenUtil.dip2px(getContext(), 10)))).into(iv);
+                        //内部实现点击事件
+                        iv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ToastUtils.showToast(list.get(index).getCode());
+                            }
+                        });
+                        return iv;
+                    }
+                })
                 .setPageMargin(ScreenUtil.dip2px(getContext(), 10), ScreenUtil.dip2px(getContext(), 10))
                 .setPageTransformer(true, new ScaleInTransformer())
                 .setPages(mList);
@@ -179,54 +276,26 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         return (int) (dp * getContext().getResources().getDisplayMetrics().density);
     }
 
+//    private void initRecommend() {
+//      rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//        RecommendAdapter recommendAdapter = new RecommendAdapter(getContext());
+//        List<RecommendBean> list = new ArrayList<>();
+//        recommendAdapter.setData(list);
+//        recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemViewClick(View view, int position) {
+//
+//            }
+//        });
+//        rvRecommend.setAdapter(recommendAdapter);
+//    }
+
     private void initRecommend() {
-        rvRecommend.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        RecommendAdapter recommendAdapter = new RecommendAdapter(getContext());
-        RecommendBean bean = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
-        RecommendBean bean1 = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
-        List<RecommendBean> list = new ArrayList<>();
-        list.add(bean);
-        list.add(bean1);
-        recommendAdapter.setData(list);
-        recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemViewClick(View view, int position) {
-
-            }
-        });
-        rvRecommend.setAdapter(recommendAdapter);
-    }
-
-    private void initGoodsList() {
-        rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvFavorite.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        RecommendAdapter recommendAdapter = new RecommendAdapter(getContext());
-        GoodsAdapter goodsAdapter = new GoodsAdapter(getContext());
-        RecommendBean bean = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
-        RecommendBean bean1 = new RecommendBean("Ray竹炭纤维面膜", "抢购价:￥38.90", "10月31日16点56分截止", "");
-
-        GoodsBean goodsBean = new GoodsBean("居家日用百货 任选5款blablablablablabla...", "14.50", "15.51", "", "172");
-        List<RecommendBean> list = new ArrayList<>();
-        List<GoodsBean> list_ = new ArrayList<>();
-        list.add(bean);
-        list.add(bean1);
-        list_.add(goodsBean);
-        list_.add(goodsBean);
-        list_.add(goodsBean);
-        list_.add(goodsBean);
-        list_.add(goodsBean);
-        list_.add(goodsBean);
-        recommendAdapter.setData(list);
-        recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-            @Override
-            public void onItemViewClick(View view, int position) {
-                ActivityUtils.startActivity(getContext(),GoodsDetailActivity.class);
-            }
-        });
-        rvRecommend.setAdapter(recommendAdapter);
-        goodsAdapter.setData(list_);
-        goodsAdapter.setOnItemClickListener(this);
-        rvFavorite.setAdapter(goodsAdapter);
+        recommendAdapter = new RecommendAdapter(getContext());
+//        recommendAdapter.setData(list_);
+        recommendAdapter.setOnItemClickListener(this);
+        rvFavorite.setAdapter(recommendAdapter);
     }
 
     @Override
@@ -256,7 +325,20 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         startActivity(intent);
     }
 
-    public class ImageHolderCreator implements com.to.aboomy.banner.HolderCreator {
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        page++;
+        recommend();
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        page=1;
+        recommendList.clear();
+        recommend();
+    }
+
+    public class ImageHolderCreator implements HolderCreator {
         @Override
         public View createView(final Context context, final int index, Object o) {
             ImageView iv = new ImageView(context);

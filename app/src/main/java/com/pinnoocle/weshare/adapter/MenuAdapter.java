@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 //导航栏菜单adapter
-public class MenuAdapter extends BaseAdapter<String, MenuAdapter.VH> {
+public class MenuAdapter extends BaseAdapter<HomeBean.DataBeanXX.CategoryBean, MenuAdapter.VH> {
 
 
     public MenuAdapter(Context mContext) {
@@ -37,7 +38,7 @@ public class MenuAdapter extends BaseAdapter<String, MenuAdapter.VH> {
             holder.menuName.setTextColor(mContext.getResources().getColor(R.color.light_black));
             holder.menuName.setTextSize(14);
         }
-        holder.menuName.setText(mDatas.get(position));
+        holder.menuName.setText(mDatas.get(position).getName());
         holder.menuName.setOnClickListener((v -> {
             mOnItemClickListener.onItemViewClick(v, position);
         }));

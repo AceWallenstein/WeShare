@@ -17,7 +17,7 @@ import com.pinnoocle.weshare.common.BaseAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecommendAdapter extends BaseAdapter<RecommendBean, RecommendAdapter.VH> {
+public class RecommendAdapter extends BaseAdapter<RecommendBean.DataBean.ListBean, RecommendAdapter.VH> {
 
 
 
@@ -29,15 +29,15 @@ public class RecommendAdapter extends BaseAdapter<RecommendBean, RecommendAdapte
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new VH(LayoutInflater.from(mContext).inflate(R.layout.item_recommend, parent, false));
+        return new VH(LayoutInflater.from(mContext).inflate(R.layout.item_goods, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
-        holder.tvRushPrice.setText(mDatas.get(position).getRush_price());
-        holder.tvDeadline.setText(mDatas.get(position).getDeadline());
-        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
+        holder.tvGoodsTitle.setText(mDatas.get(position).getName());
+        holder.tvMembershipPrice.setText("￥"+mDatas.get(position).getVip_price());
+        holder.tvNonMemberPrice.setText("非会员￥"+mDatas.get(position).getPrice());
+        holder.tvPaymentNum.setText(mDatas.get(position).getName());
     }
 
     @Override
@@ -47,14 +47,18 @@ public class RecommendAdapter extends BaseAdapter<RecommendBean, RecommendAdapte
 
 
     public static class VH extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_goods_title)
-        TextView tvGoodsTitle;
-        @BindView(R.id.tv_rush_price)
-        TextView tvRushPrice;
-        @BindView(R.id.tv_deadline)
-        TextView tvDeadline;
         @BindView(R.id.iv_goods_pic)
         ImageView ivGoodsPic;
+        @BindView(R.id.tv_goods_title)
+        TextView tvGoodsTitle;
+        @BindView(R.id.tv_membership_price)
+        TextView tvMembershipPrice;
+        @BindView(R.id.tv_non_member_price)
+        TextView tvNonMemberPrice;
+        @BindView(R.id.tv_payment_num)
+        TextView tvPaymentNum;
+        @BindView(R.id.iv_shop_car)
+        ImageView ivShopCar;
 
         public VH(@NonNull View itemView) {
             super(itemView);
