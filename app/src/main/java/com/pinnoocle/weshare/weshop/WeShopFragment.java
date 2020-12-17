@@ -96,8 +96,11 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         View view = inflater.inflate(R.layout.fragment_we_shop, container, false);
         unbinder = ButterKnife.bind(this, view);
         initView();
+        initData();
         return view;
     }
+
+
 
     private void initView() {
         initMenus();
@@ -129,26 +132,16 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         });
 
     }
+    private void initData() {
+
+    }
 
 
     private void initMenus() {
-        menus.add("推荐");
-        menus.add("食品");
-        menus.add("洗护");
-        menus.add("百货");
-        menus.add("儿童母婴");
-        menus.add("家居");
-        menus.add("美妆");
-        menus.add("饰品");
-        menus.add("女装");
-        menus.add("男装");
-        menus.add("鞋靴");
-        menus.add("箱包");
-        menus.add("数码家电");
-        menus.add("服务");
+
         rvMenus.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         MenuAdapter menuAdapter = new MenuAdapter(getContext());
-        menuAdapter.setData(menus);
+//        menuAdapter.setData(menus);
         menuAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemViewClick(View view, int position) {
