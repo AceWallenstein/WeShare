@@ -1,6 +1,8 @@
 package com.pinnoocle.weshare.bean;
 
-public class AddressBean {
+import java.io.Serializable;
+
+public class AddressBean implements Serializable {
     String name;
     String phone;
     String address;

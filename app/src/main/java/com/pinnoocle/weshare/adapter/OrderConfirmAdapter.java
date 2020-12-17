@@ -16,9 +16,11 @@ import butterknife.ButterKnife;
 public class OrderConfirmAdapter extends BaseAdapter<String, OrderConfirmAdapter.VH> {
     //item选中位置
     private int pos = 0;
+
     public OrderConfirmAdapter(Context mContext) {
         super(mContext);
     }
+
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,7 +29,10 @@ public class OrderConfirmAdapter extends BaseAdapter<String, OrderConfirmAdapter
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
+        if (mOnItemClickListener != null) {
+
+            holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
+        }
     }
 
     @Override

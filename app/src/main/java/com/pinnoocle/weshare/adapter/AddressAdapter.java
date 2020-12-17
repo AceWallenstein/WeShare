@@ -59,6 +59,7 @@ public class AddressAdapter extends BaseAdapter<AddressBean, AddressAdapter.VH> 
                 }
             }
         });
+        holder.itemView.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v,position,mDatas.get(position)));
     }
 
     @Override

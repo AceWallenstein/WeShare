@@ -1,5 +1,6 @@
 package com.pinnoocle.weshare.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import com.lxj.xpopupext.listener.CityPickerListener;
 import com.lxj.xpopupext.popup.CityPickerPopup;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.AddressBean;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 
@@ -77,6 +79,14 @@ public class AddAddressActivity extends BaseActivity {
                         ToastUtils.showToast("手机号码格式不正确");
                     } else {
                        //保存地址到服务器
+                        String name = edName.getText().toString();
+                        String phone = edPhone.getText().toString();
+                        String address = edArea.getText().toString()+ edAddress.getText().toString();
+                        AddressBean addressBean = new AddressBean(name, phone, address);
+                        Intent intent = new Intent();
+                        intent.putExtra("addressBean",addressBean);
+                        setResult(1,intent);
+                        finish();
                     }
                 }
                 break;

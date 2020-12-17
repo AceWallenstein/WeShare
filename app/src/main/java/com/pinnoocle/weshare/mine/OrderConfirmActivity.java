@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.mine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,14 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.OrderAdapter;
 import com.pinnoocle.weshare.adapter.OrderConfirmAdapter;
+import com.pinnoocle.weshare.bean.AddressBean;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +40,7 @@ public class OrderConfirmActivity extends BaseActivity {
     TextView tvPhone;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.ll_name)
+    @BindView(R.id.ll_address)
     LinearLayout llName;
     @BindView(R.id.iv_line)
     ImageView ivLine;
@@ -94,7 +100,7 @@ public class OrderConfirmActivity extends BaseActivity {
         recyclerView.setAdapter(orderAdapter);
     }
 
-    @OnClick({R.id.iv_back, R.id.rl_pay_mode_wechat, R.id.rl_pay_mode_balance})
+    @OnClick({R.id.iv_back, R.id.rl_pay_mode_wechat, R.id.rl_pay_mode_balance,R.id.ll_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -106,6 +112,27 @@ public class OrderConfirmActivity extends BaseActivity {
             case R.id.rl_pay_mode_balance:
                 switchPayMode(ivRightMark2, ivRightMark1);
                 break;
+            case R.id.ll_address:
+//                ActivityUtils.startActivityForResult(this,AddressActivity.class,9);
+                Intent intent = new Intent(this,AddressActivity.class);
+                intent.putExtra("from","from");
+                startActivityForResult(intent,9);
+
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==9&&resultCode==1){
+            Serializable serializable = data.getSerializableExtra("addressBean");
+            AddressBean address = (AddressBean) serializable;
+            tvName.setText(address.getName());
+            String phone = address.getPhone();
+            String phone1 = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+            tvPhone.setText(phone1);
+            tvAddress.setText(address.getAddress());
         }
     }
 

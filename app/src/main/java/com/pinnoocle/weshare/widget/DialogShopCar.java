@@ -17,6 +17,8 @@ import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
 import com.pinnoocle.weshare.mine.OrderDetailsActivity;
+import com.pinnoocle.weshare.mine.ShopCarActivity;
+import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.timmy.tdialog.TDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -29,7 +31,7 @@ import java.util.Set;
 import ren.qinc.numberbutton.NumberButton;
 
 public class DialogShopCar extends BottomPopupView implements View.OnClickListener {
-    private  FragmentManager fm;
+    private FragmentManager fm;
     private ImageView iv_close;
     private ImageView iv_shop;
     private TextView tv_price;
@@ -41,6 +43,8 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
     private NumberButton numberButton;
     private TextView tv_buy;
     private TextView tv_add_shop_car;
+    private boolean flag = false;
+    private ImageView ivMark;
 
     public DialogShopCar(@NonNull Context context, FragmentManager fm) {
         super(context);
@@ -74,6 +78,10 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         iv_close.setOnClickListener(this);
         tv_add_shop_car.setOnClickListener(this);
         tv_buy.setOnClickListener(this);
+        findViewById(R.id.iv_customer_service).setOnClickListener(this);
+        findViewById(R.id.iv_shop_car).setOnClickListener(this);
+        ivMark.setOnClickListener(this);
+
     }
 
     private void initView() {
@@ -88,6 +96,7 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         numberButton = findViewById(R.id.number_button);
         tv_buy = findViewById(R.id.tv_buy);
         tv_add_shop_car = findViewById(R.id.tv_add_shop_car);
+        ivMark = findViewById(R.id.iv_mark);
     }
 
     private void initTag(TagFlowLayout flowLayout, List<String> mVals, String type) {
@@ -160,11 +169,25 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
 //                        .setDialogAnimationRes(R.style.animate_dialog)  //设置弹窗动画
                         .create()   //创建TDialog
                         .show();//展示
-                postDelayed(()->tDialog.dismiss(),1000);
+                postDelayed(() -> tDialog.dismiss(), 1000);
                 break;
             case R.id.tv_buy:
                 Intent intent = new Intent(getContext(), OrderConfirmActivity.class);
                 getContext().startActivity(intent);
+                break;
+            case R.id.iv_mark:
+                flag = !flag;
+                if (flag) {
+                    ivMark.setImageResource(R.mipmap.mark_star);
+                } else {
+                    ivMark.setImageResource(R.mipmap.bg_mark_star);
+                }
+                break;
+            case R.id.iv_customer_service:
+                break;
+
+            case R.id.iv_shop_car:
+                ActivityUtils.startActivity(getContext(), ShopCarActivity.class);
                 break;
         }
     }
