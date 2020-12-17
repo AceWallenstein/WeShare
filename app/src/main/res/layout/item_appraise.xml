@@ -1,15 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+
+        <com.pinnoocle.weshare.widget.RoundImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@mipmap/avater" />
+
+        <com.kaelli.niceratingbar.NiceRatingBar
+            android:id="@+id/niceRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:nrb_rating="4"
+            app:nrb_ratingStatus="Disable"
+            app:nrb_starEmptyResource="@mipmap/rating_star_off"
+            app:nrb_starFullResource="@mipmap/rating_star_on"
+            app:nrb_starImageHeight="16dp"
+            app:nrb_starImagePadding="2dp"
+            app:nrb_starImageWidth="16dp"
+            app:nrb_starTotal="5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="65dp"
+            android:text="2019-10-28  14:00"
+            android:textColor="@color/grey"
+            android:textSize="11sp" />
+    </LinearLayout>
+
     <TextView
+        android:layout_marginStart="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="123"/>
-    <com.kaelli.niceratingbar.NiceRatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:padding="10dp"
+        android:text="性价比超高 好评哦！"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#F6F5F5"/>
 
 </LinearLayout>

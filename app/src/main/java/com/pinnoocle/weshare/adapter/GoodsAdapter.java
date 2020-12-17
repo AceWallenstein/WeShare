@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import butterknife.ButterKnife;
 public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
 
 
-
     public GoodsAdapter(Context mContext) {
         super(mContext);
     }
@@ -36,13 +36,15 @@ public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
-        holder.tvMemberPrice.setText("￥"+mDatas.get(position).getNonMembershipPrice());
-        holder.tvNonMemberPrice.setText("非会员￥"+mDatas.get(position).getMembershipPrice());
-        holder.tvPaymentNum.setText(mDatas.get(position).getPaymentsNum()+"人付款");
-        Glide.with(mContext).load(R.mipmap.deletepic).centerCrop().into(holder.ivGoodsPic);
+        holder.tvMemberPrice.setText("￥" + mDatas.get(position).getNonMembershipPrice());
+        holder.tvNonMemberPrice.setText("非会员￥" + mDatas.get(position).getMembershipPrice());
+        holder.tvPaymentNum.setText(mDatas.get(position).getPaymentsNum() + "人付款");
+//        Glide.with(mContext).load(Integer.parseInt(mDatas.get(position).getGoods_pic())) .into(holder.ivGoodsPic);
+        if (!TextUtils.isEmpty(mDatas.get(position).getGoods_pic()))
+            holder.ivGoodsPic.setImageResource(Integer.parseInt(mDatas.get(position).getGoods_pic()));
 
-        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
-        holder.ivShopCar.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
+        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
+        holder.ivShopCar.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
     }
 
     @Override

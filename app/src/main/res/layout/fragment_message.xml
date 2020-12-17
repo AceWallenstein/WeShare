@@ -146,6 +146,7 @@
             android:src="@mipmap/arrow_right" />
     </RelativeLayout>
     <RelativeLayout
+        android:visibility="gone"
         android:background="@color/white"
         android:id="@+id/rv_chat_room"
         android:layout_width="match_parent"

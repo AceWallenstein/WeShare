@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.mine.OrderConfirmActivity;
 import com.pinnoocle.weshare.mine.OrderDetailsActivity;
 import com.timmy.tdialog.TDialog;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -162,7 +163,7 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
                 postDelayed(()->tDialog.dismiss(),1000);
                 break;
             case R.id.tv_buy:
-                Intent intent = new Intent(getContext(), OrderDetailsActivity.class);
+                Intent intent = new Intent(getContext(), OrderConfirmActivity.class);
                 getContext().startActivity(intent);
                 break;
         }

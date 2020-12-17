@@ -1,5 +1,6 @@
 package com.pinnoocle.weshare.weshop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.pinnoocle.weshare.adapter.ClassificationAdapter;
 import com.pinnoocle.weshare.adapter.GoodsListAdapter;
 import com.pinnoocle.weshare.bean.GoodsBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +24,21 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
 /*
 分类界面
  */
-public class GoodClassificationFragment extends Fragment {
+public class GoodClassificationFragment extends Fragment implements BaseAdapter.OnItemClickListener {
     @BindView(R.id.rv_classification)
     RecyclerView rvClassification;
     @BindView(R.id.rv_goods_list)
     RecyclerView rvGoodsList;
     private Unbinder unbinder;
-    private ClassificationAdapter classificationAdapter;
+    private ClassificationAdapter classhoificationAdapter;
     private GoodsListAdapter goodsListAdapter;
     private List<GoodsBean> list = new ArrayList<>();
+    private ClassificationAdapter classificationAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,7 @@ public class GoodClassificationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_good_classification, container, false);
         unbinder = ButterKnife.bind(this, view);
         initView();
+        getGoods(0);
         return view;
     }
 
@@ -88,20 +94,20 @@ public class GoodClassificationFragment extends Fragment {
                 getGoods(position);
             }
         });
-
+        goodsListAdapter.setOnItemClickListener(this);
     }
 
     private void getGoods(int position) {
-        if (position == 0)//女装
-        {
-            GoodsBean goodsBean = new GoodsBean("女装女装女装女装...", "14.50", "15.51", "", "172");
-            for (int i = 0; i < 11; i++) {
-                list.add(goodsBean);
-            }
-        }else {
+        if (position == 0||position==2) {
             list.clear();
 
+            return;
         }
+        list.clear();
+        GoodsBean goodsBean = new GoodsBean("润唇膏保湿滋润补水防干裂", "14.50", "15.51", R.mipmap.samlpe_5 + "", "172");
+        GoodsBean goodsBean1 = new GoodsBean("曼秀雷敦润唇膏女湿滋润", "22.50", "15.51", R.mipmap.sample_6 + "", "172");
+        list.add(goodsBean);
+        list.add(goodsBean1);
         goodsListAdapter.setData(list);
     }
 
@@ -109,5 +115,11 @@ public class GoodClassificationFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onItemViewClick(View view, int position) {
+        Intent intent = new Intent();
+        ActivityUtils.startActivity(getContext(), GoodsDetailActivity.class);
     }
 }

@@ -1,7 +1,10 @@
 package com.pinnoocle.weshare;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -44,7 +47,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
     public void onEvent(String message) {
         if (message.equals("1")) {
-         viewPager.setCurrentItem(0);
+            viewPager.setCurrentItem(0);
         }
     }
 
@@ -132,5 +135,16 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         } else {
             finish();
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+        return super.onTouchEvent(event);
     }
 }

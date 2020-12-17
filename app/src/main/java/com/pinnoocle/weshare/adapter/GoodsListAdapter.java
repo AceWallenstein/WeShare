@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,13 @@ public class GoodsListAdapter extends BaseAdapter<GoodsBean, RecyclerView.ViewHo
             position = position - 1;//banner占据一个位置。
             VH vh = (VH) holder;
             vh.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
-            Glide.with(mContext).load(R.mipmap.deletepic).centerCrop().into(vh.ivGoodsPic);
+            if (!TextUtils.isEmpty(mDatas.get(position).getGoods_pic()))
+                vh.ivGoodsPic.setImageResource(Integer.parseInt(mDatas.get(position).getGoods_pic()));
+            int finalPosition = position;
+            if (mOnItemClickListener != null) {
+
+            vh.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, finalPosition));
+            }
         }
     }
 

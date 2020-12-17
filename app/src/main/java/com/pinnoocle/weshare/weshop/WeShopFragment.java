@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -37,6 +41,8 @@ import com.pinnoocle.weshare.widget.TagsGridView;
 import com.to.aboomy.banner.Banner;
 import com.to.aboomy.banner.IndicatorView;
 import com.to.aboomy.banner.ScaleInTransformer;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,9 +73,12 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
 
     private Unbinder unbinder;
-    private int[] icon = {R.mipmap.groupon_seckill, R.mipmap.hot_selling_mall, R.mipmap.luck_draw, R.mipmap.recommend,
-            R.mipmap.tiao_sao_market};
-    private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐", "跳蚤市场"};
+    //    private int[] icon = {R.mipmap.groupon_seckill, R.mipmap.hot_selling_mall, R.mipmap.luck_draw, R.mipmap.recommend,
+//            R.mipmap.tiao_sao_market};
+    private int[] icon = {R.mipmap.groupon_seckill, R.mipmap.hot_selling_mall, R.mipmap.luck_draw, R.mipmap.recommend};
+//    private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐", "跳蚤市场"};
+
+    private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐"};
 
     List<String> menus = new ArrayList<>();
     private SimpleAdapter sim_adapter;
@@ -97,6 +106,28 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         initRecommend();
         initGoodsList();
         gridView.setOnItemClickListener(this);
+        edSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    ((InputMethodManager) edSearch.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(
+                                    getActivity().getCurrentFocus().getWindowToken(),
+                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    if (edSearch.getText().toString().equals("")) {
+                        ToastUtils.showToast("搜索内容不能为空");
+                    } else {
+                        Intent intent = new Intent(getContext(), GoodsListActivity.class);
+                        intent.putExtra("title", "热卖商城");
+                        getActivity().startActivity(intent);
+
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
 
@@ -196,7 +227,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemViewClick(View view, int position) {
-
+                ActivityUtils.startActivity(getContext(),GoodsDetailActivity.class);
             }
         });
         rvRecommend.setAdapter(recommendAdapter);
@@ -208,16 +239,23 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
+            ActivityUtils.startActivity(getContext(), GroupSeckillActivity.class);
         } else if (position == 1) {
+            Intent intent = new Intent(getContext(), GoodsListActivity.class);
+            intent.putExtra("title", "热卖商城");
+            getActivity().startActivity(intent);
         } else if (position == 2) {
+            ToastUtils.showToast("此功能正在开发，让我们一起期待更多精彩功能！");
         } else if (position == 3) {
+            ToastUtils.showToast("此功能正在开发，让我们一起期待更多精彩功能！");
+
         } else if (position == 4) {
         }
     }
 
     @Override
     public void onItemViewClick(View view, int position) {
-        if(view.getId()==R.id.iv_shop_car){
+        if (view.getId() == R.id.iv_shop_car) {
             ToastUtils.showToast("加入购物车");
             return;
         }

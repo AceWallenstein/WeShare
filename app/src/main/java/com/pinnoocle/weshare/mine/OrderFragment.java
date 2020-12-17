@@ -8,20 +8,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.OrderAdapter;
+import com.pinnoocle.weshare.bean.OrderBean;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -39,16 +37,16 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
     public static OrderFragment newInstance(String type) {
 
         Bundle args = new Bundle();
-        args.putString("type",type);
+        args.putString("type", type);
         OrderFragment fragment = new OrderFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments()!=null)
-        {
+        if (getArguments() != null) {
             type = getArguments().getString("type");
         }
     }
@@ -61,6 +59,14 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
         initView(v);
         return v;
     }
+        /*
+     titles.add("全部");
+        titles.add("待付款");
+        titles.add("待发货");
+        titles.add("待收货");
+        titles.add("待评价");
+        titles.add("团购订单");
+     */
 
     private void initView(View v) {
         recycleView = v.findViewById(R.id.recycleView);
@@ -68,6 +74,23 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
 //        dataRepository = Injection.dataRepository(getContext());
         recycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         orderAdapter = new OrderAdapter(getContext());
+        List<OrderBean> list = new ArrayList<>();
+        if (type.equals("全部")) {
+            for (int i = 0; i < 4; i++) {
+                list.add(new OrderBean(i));
+            }
+        } else if (type.equals("待付款")) {
+            list.add(new OrderBean(1));
+        } else if (type.equals("待发货")) {
+            list.add(new OrderBean(2));
+        } else if (type.equals("待收货")) {
+            list.add(new OrderBean(0));
+        } else if (type.equals("待评价")) {
+            list.add(new OrderBean(3));
+        } else if (type.equals("团购订单")) {
+        }
+
+        orderAdapter.setData(list);
         recycleView.setAdapter(orderAdapter);
         orderAdapter.setOnItemClickListener(this);
 
@@ -122,7 +145,7 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
     public void onItemViewClick(View view, int position) {
         Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
 //        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
-//        startActivity(intent);
+        startActivity(intent);
     }
 
     @Override

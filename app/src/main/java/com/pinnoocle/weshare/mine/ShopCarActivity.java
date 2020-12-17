@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.ShopCarItemAdapter;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -64,7 +65,7 @@ public class ShopCarActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick({R.id.tv_all_select, R.id.tv_cancel, R.id.ll_all_select})
+    @OnClick({R.id.tv_all_select, R.id.tv_cancel, R.id.ll_all_select,R.id.tv_settlement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_all_select:
@@ -72,6 +73,9 @@ public class ShopCarActivity extends BaseActivity {
             case R.id.tv_cancel:
                 break;
             case R.id.ll_all_select:
+                break;
+            case R.id.tv_settlement:
+                ActivityUtils.startActivity(this,OrderConfirmActivity.class);
                 break;
         }
     }

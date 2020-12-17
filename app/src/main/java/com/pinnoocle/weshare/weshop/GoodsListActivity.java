@@ -69,8 +69,9 @@ public class GoodsListActivity extends BaseActivity {
     private void initView() {
         String title = getIntent().getStringExtra("title");
         tvTitle.setText(title);
+        String type =title;
         fragments = new ArrayList<>();
-        fragments.add(new GoodsListFragment());
+        fragments.add(new GoodsListFragment(type));
         fragments.add(new GoodClassificationFragment());
         pageIds = new TextView[]{tvComposite, tvSales, tvPrice, tvClassification};
         fragmentTabAdapter = new FragmentTabAdapter(this, fragments, R.id.content);

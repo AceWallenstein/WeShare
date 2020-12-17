@@ -27,10 +27,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
 /*
 商品列表
  */
 public class GoodsListFragment extends Fragment implements OnRefreshLoadMoreListener, BaseAdapter.OnItemClickListener {
+    private  String type;
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
     @BindView(R.id.refresh)
@@ -40,6 +42,10 @@ public class GoodsListFragment extends Fragment implements OnRefreshLoadMoreList
     private GoodsAdapter goodsAdapter;
     private List<GoodsBean> list;
     private List<GoodsBean> mDatas = new ArrayList<>();
+
+    public GoodsListFragment(String type) {
+        this.type = type;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,12 +74,14 @@ public class GoodsListFragment extends Fragment implements OnRefreshLoadMoreList
     }
 
     private void initData() {
-        GoodsBean goodsBean = new GoodsBean("居家日用百货 任选5款blablablablablabla...", "14.50", "15.51", "", "172");
-        for (int i = 0; i < 10 ; i++) {
-            list.add(goodsBean);
-        }
-        mDatas.addAll(list);
-        goodsAdapter.setData(mDatas);
+
+            GoodsBean goodsBean = new GoodsBean("居家日用百货 任选5款blablablablablabla...", "14.50", "15.51", "", "172");
+            for (int i = 0; i < 2; i++) {
+                list.add(goodsBean);
+            }
+            mDatas.addAll(list);
+            goodsAdapter.setData(mDatas);
+
     }
 
     @Override
@@ -84,26 +92,26 @@ public class GoodsListFragment extends Fragment implements OnRefreshLoadMoreList
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        page++;
-        initData();
-        if (page > 3) {
+//        page++;
+//        initData();
+//        if (page > 3) {
             refresh.finishLoadMoreWithNoMoreData();
-        }else {
-            refresh.finishLoadMore();
-        }
+//        } else {
+//            refresh.finishLoadMore();
+//        }
     }
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        page = 1;
-        mDatas.clear();
-        initData();
+//        page = 1;
+//        mDatas.clear();
+//        initData();
         refresh.finishRefresh();
     }
 
     @Override
     public void onItemViewClick(View view, int position) {
         Intent intent = new Intent();
-        ActivityUtils.startActivity(getContext(),GoodsDetailActivity.class);
+        ActivityUtils.startActivity(getContext(), GoodsDetailActivity.class);
     }
 }

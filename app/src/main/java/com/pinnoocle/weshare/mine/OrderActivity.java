@@ -78,6 +78,7 @@ public class OrderActivity extends BaseActivity {
         viewPager.setCurrentItem(type);
         xTablayout.getTabAt(type).select();
 
+
     }
 
     @OnClick(R.id.iv_back)

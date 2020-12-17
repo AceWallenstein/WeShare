@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white1"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
@@ -42,24 +41,26 @@
         <ImageView
             android:id="@+id/iv_mark"
             android:layout_width="0dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/bg_mark_star"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@mipmap/bg_mark_star" />
+
         <ImageView
             android:id="@+id/iv_customer_service"
-            android:layout_gravity="center"
-            android:src="@mipmap/bg_customer_service"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@mipmap/bg_customer_service" />
+
         <ImageView
             android:id="@+id/iv_shop_car"
-            android:layout_gravity="center"
-            android:src="@mipmap/bg_shop_car"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@mipmap/bg_shop_car" />
 
         <TextView
             android:id="@+id/tv_add_shop_car"
@@ -101,6 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="376dp">
@@ -109,19 +111,20 @@
                     android:id="@+id/goods_banner"
                     android:layout_width="match_parent"
                     android:layout_height="375dp" />
+
                 <TextView
-                    tools:text="1/3"
-                    android:padding="6dp"
-                    android:layout_alignParentBottom="true"
+                    android:id="@+id/banner_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_indicator"
+                    android:padding="6dp"
                     android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/banner_indicator"/>
+                    tools:text="1/3" />
             </RelativeLayout>
             <!--            <ImageView-->
             <!--                android:layout_width="match_parent"-->
@@ -373,12 +376,52 @@
                         android:textColor="@color/light_black"
                         android:textSize="13sp" />
 
+                    <LinearLayout
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_below="@id/tv_appraise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.kaelli.niceratingbar.NiceRatingBar
+                            android:id="@+id/niceRatingBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:nrb_rating="4"
+                            app:nrb_ratingStatus="Disable"
+                            app:nrb_starEmptyResource="@mipmap/rating_star_off"
+                            app:nrb_starFullResource="@mipmap/rating_star_on"
+                            app:nrb_starImageHeight="16dp"
+                            app:nrb_starImagePadding="2dp"
+                            app:nrb_starImageWidth="16dp"
+                            app:nrb_starTotal="5" />
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="好评"
+                            android:textSize="14sp"
+                            android:textColor="@color/light_black"
+                            />
+
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2019-10-28"
+                            android:textColor="@color/grey73"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
                 </RelativeLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:id="@+id/recyclerView"/>
+                    android:overScrollMode="never" />
 
                 <View
                     android:layout_width="match_parent"

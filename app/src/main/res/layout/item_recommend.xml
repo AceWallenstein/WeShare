@@ -13,9 +13,9 @@
         app:cardCornerRadius="5dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="6dp">
 
             <TextView
                 android:id="@+id/tv_goods_title"
@@ -40,17 +40,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_rush_price"
-                android:background="@drawable/bg_tv_deadline"
+                android:background="@drawable/bg_tv_red"
                 android:textColor="@color/white"
-                android:textSize="8sp"
+                android:textSize="7sp"
                 tools:text="Ray竹炭纤维面膜" />
-
             <ImageView
+                android:layout_centerVertical="true"
+                android:layout_marginStart="6dp"
                 android:id="@+id/iv_goods_pic"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@id/tv_goods_title"
+                android:background="@mipmap/sample_6" />
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/bg_iv_goods_pic" />
+                android:layout_above="@id/iv_goods_pic"
+                android:layout_marginBottom="-20dp"
+                android:layout_toStartOf="@id/iv_goods_pic"
+                android:src="@mipmap/icon_xianshi"
+                android:layout_marginEnd="-25dp"/>
+
 
             <TextView
                 android:layout_width="wrap_content"

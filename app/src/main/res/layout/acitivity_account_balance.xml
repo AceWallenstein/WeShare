@@ -90,7 +90,7 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/light_white"
             android:textSize="55sp"
-            android:text="100.00" />
+            android:text="0.00" />
 
         <TextView
             android:layout_marginTop="10dp"

@@ -37,6 +37,7 @@ public class RecommendAdapter extends BaseAdapter<RecommendBean, RecommendAdapte
         holder.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
         holder.tvRushPrice.setText(mDatas.get(position).getRush_price());
         holder.tvDeadline.setText(mDatas.get(position).getDeadline());
+        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
     }
 
     @Override

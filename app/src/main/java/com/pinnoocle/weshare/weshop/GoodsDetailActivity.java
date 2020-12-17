@@ -1,7 +1,6 @@
 package com.pinnoocle.weshare.weshop;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,20 +14,14 @@ import com.lxj.xpopup.XPopup;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
-import com.pinnoocle.weshare.mine.OrderDetailsActivity;
+import com.pinnoocle.weshare.mine.ShopCarActivity;
 import com.pinnoocle.weshare.utils.ActivityUtils;
-import com.pinnoocle.weshare.utils.ScreenUtil;
 import com.pinnoocle.weshare.widget.DialogCoupons;
 import com.pinnoocle.weshare.widget.DialogPledge;
 import com.pinnoocle.weshare.widget.DialogShopCar;
-import com.timmy.tdialog.TDialog;
-import com.to.aboomy.banner.ScaleInTransformer;
 import com.youth.banner.Banner;
 import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
-import com.youth.banner.indicator.CircleIndicator;
-import com.youth.banner.indicator.RectangleIndicator;
-import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnPageChangeListener;
 
 import java.util.ArrayList;
@@ -91,7 +84,14 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     Banner banner;
     @BindView(R.id.banner_indicator)
     TextView bannerIndicator;
+    @BindView(R.id.iv_mark)
+    ImageView ivMark;
+    @BindView(R.id.iv_customer_service)
+    ImageView ivCustomerService;
+    @BindView(R.id.iv_shop_car)
+    ImageView ivShopCar;
     private List<Integer> mList;
+    private boolean flag = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         initTransparent();
@@ -118,12 +118,12 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                     }
                 })
                 .isAutoLoop(false)
-                .addOnPageChangeListener(this)	;
-        bannerIndicator.setText("1/"+ mList.size());
+                .addOnPageChangeListener(this);
+        bannerIndicator.setText("1/" + mList.size());
 //        banner.setCurrentItem(0);
     }
 
-    @OnClick({R.id.iv_back, R.id.ll_share, R.id.rl_discount, R.id.rl_select, R.id.rl_pledge, R.id.tv_more, R.id.tv_add_shop_car, R.id.tv_buy})
+    @OnClick({R.id.iv_back, R.id.ll_share, R.id.rl_discount, R.id.rl_select, R.id.rl_pledge, R.id.tv_more, R.id.tv_add_shop_car, R.id.tv_buy, R.id.iv_mark, R.id.iv_customer_service, R.id.iv_shop_car})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -141,12 +141,27 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                 showPledgeDialog();
                 break;
             case R.id.tv_more:
+                ActivityUtils.startActivity(this, AppraiseActivity.class);
                 break;
             case R.id.tv_add_shop_car:
                 showShopCarDialog();
                 break;
             case R.id.tv_buy:
                 ActivityUtils.startActivity(this, OrderConfirmActivity.class);
+                break;
+            case R.id.iv_mark:
+                flag = !flag;
+                if (flag) {
+                    ivMark.setImageResource(R.mipmap.mark_star);
+                } else {
+                    ivMark.setImageResource(R.mipmap.bg_mark_star);
+                }
+                break;
+            case R.id.iv_customer_service:
+                break;
+
+            case R.id.iv_shop_car:
+                ActivityUtils.startActivity(this, ShopCarActivity.class);
                 break;
         }
     }
@@ -172,7 +187,10 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     }
 
     private void showSelectDialog() {
-
+        new XPopup.Builder(this)
+                .enableDrag(false)
+                .asCustom(new DialogShopCar(this, getSupportFragmentManager()))
+                .show();
     }
 
     private void showPledgeDialog() {
@@ -189,8 +207,8 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
 
     @Override
     public void onPageSelected(int position) {
-        int realposition = position+1;
-        bannerIndicator.setText(realposition+"/"+mList.size());
+        int realposition = position + 1;
+        bannerIndicator.setText(realposition + "/" + mList.size());
     }
 
     @Override
