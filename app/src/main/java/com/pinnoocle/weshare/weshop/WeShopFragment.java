@@ -248,7 +248,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                 if (position == 0)
                     return;
                 Intent intent = new Intent(getContext(), GoodsListActivity.class);
-//                intent.putExtra("title", menus.get(position));
+//                intent.putExtra(Constants., menus.get(position).getId()+"");
                 getActivity().startActivity(intent);
 
             }

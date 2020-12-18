@@ -1,5 +1,6 @@
 package com.pinnoocle.weshare.weshop;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
@@ -206,7 +207,9 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                 showPledgeDialog();
                 break;
             case R.id.tv_more:
-                ActivityUtils.startActivity(this, EvaluationActivity.class);
+                Intent intent = new Intent(this, EvaluationActivity.class);
+                intent.putExtra(Constants.GOODS_ID,getIntent().getStringExtra(Constants.ID));
+                startActivity(intent);
                 break;
             case R.id.tv_add_shop_car:
                 showShopCarDialog();

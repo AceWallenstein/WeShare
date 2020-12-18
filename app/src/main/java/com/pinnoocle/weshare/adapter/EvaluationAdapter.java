@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,14 +12,13 @@ import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.GoodsBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AppraiseAdapter extends BaseAdapter<GoodsBean, AppraiseAdapter.VH> {
+public class EvaluationAdapter extends BaseAdapter<GoodsBean, EvaluationAdapter.VH> {
 
 
 
-    public AppraiseAdapter(Context mContext) {
+    public EvaluationAdapter(Context mContext) {
         super(mContext);
     }
 

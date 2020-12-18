@@ -1,7 +1,6 @@
 package com.pinnoocle.weshare.weshop;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.FragmentAdapter;
 import com.pinnoocle.weshare.bean.EvaluationBean;
-import com.pinnoocle.weshare.bean.GoodsDetailBean;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.common.Constants;
 import com.pinnoocle.weshare.nets.DataRepository;
@@ -40,7 +38,7 @@ public class EvaluationActivity extends BaseActivity {
     ViewPager viewPager;
     private List<Fragment> fragments = new ArrayList<>();
     private DataRepository dataRepository;
-    private int page;
+    private int page = 1;
 
     protected void onCreate(Bundle savedInstanceState) {
         initTransparent();
@@ -57,13 +55,26 @@ public class EvaluationActivity extends BaseActivity {
 
 
     private void initSubView(EvaluationBean.DataBean data) {
+        int all, good, middle, worst;
+        good = middle = worst = 0;
+        all = data.getCount();
+        for (int i = 0; i < data.getList().size(); i++) {
+            int score = data.getList().get(i).getScore(); //应该是用type判断，到时在修改。
+            if (score > 3) {
+                good++;
+            } else if (score > 1) {
+                middle++;
+            } else if (score <= 1) {
+                worst++;
+            }
+        }
         List<String> titles = new ArrayList<>();
-        titles.add("全部(3)");
-        titles.add("好评(3)");
-        titles.add("中评(0)");
-        titles.add("差评(0)");
+        titles.add("全部(" + all + ")");
+        titles.add("好评(" + good + ")");
+        titles.add("中评(" + middle + ")");
+        titles.add("差评(" + worst + ")");
         for (int i = 0; i < titles.size(); i++) {
-            fragments.add(new AppraiseFragment(titles.get(i)));
+            fragments.add(new EvaluationFragment(titles.get(i)));
         }
         FragmentAdapter adatper = new FragmentAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adatper);
@@ -83,10 +94,6 @@ public class EvaluationActivity extends BaseActivity {
             }
         }
         xTablayout.addOnTabSelectedListener(new MyTabSelectedListener());
-        int type = getIntent().getIntExtra("type", 0);
-        viewPager.setCurrentItem(type);
-        xTablayout.getTabAt(type).select();
-
     }
 
     private void initData() {
