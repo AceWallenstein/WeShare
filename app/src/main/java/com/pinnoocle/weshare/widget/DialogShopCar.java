@@ -1,8 +1,9 @@
 package com.pinnoocle.weshare.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +13,36 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.lxj.xpopup.core.BottomPopupView;
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.GoodsDetailBean;
+import com.pinnoocle.weshare.bean.SpecBean;
+import com.pinnoocle.weshare.common.Constants;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
-import com.pinnoocle.weshare.mine.OrderDetailsActivity;
 import com.pinnoocle.weshare.mine.ShopCarActivity;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
+import com.pinnoocle.weshare.weshop.GoodsDetailActivity;
 import com.timmy.tdialog.TDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ren.qinc.numberbutton.NumberButton;
 
@@ -45,10 +61,14 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
     private TextView tv_add_shop_car;
     private boolean flag = false;
     private ImageView ivMark;
+    private int specId;
+    private DataRepository dataRepository;
 
-    public DialogShopCar(@NonNull Context context, FragmentManager fm) {
+
+    public DialogShopCar(@NonNull Context context, FragmentManager fm, int specId) {
         super(context);
         this.fm = fm;
+        this.specId = specId;
     }
 
     @Override
@@ -61,18 +81,26 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         super.onCreate();
         initView();
         initListener();
-        List<String> mVals = new ArrayList<>();
-        mVals.add("S");
-        mVals.add("M");
-        mVals.add("L");
-        mVals.add("XL");
-        initTag(flowlayout_size, mVals, "尺寸");
-        List<String> mVals1 = new ArrayList<>();
-        mVals1.add("卡其色");
-        initTag(flowlayout_color, mVals1, "颜色");
 //assert numberButton != null;
         initNumberButton(numberButton);
     }
+
+//    private void handleJson(List<String> mVals, String s) {
+//        String reg = "\\:\"(.*?)\"";
+//
+//        Pattern pattern = Pattern.compile(reg);
+//
+//        // 内容 与 匹配规则 的测试
+//        Matcher matcher = pattern.matcher(s);
+//
+//        while (matcher.find()) {
+////            // 包含前后的两个字符
+////            System.out.println(matcher.group());
+//            // 不包含前后的两个字符
+//            mVals.add(matcher.group(1));
+//        }
+//    }
+
 
     private void initListener() {
         iv_close.setOnClickListener(this);
@@ -97,6 +125,43 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         tv_buy = findViewById(R.id.tv_buy);
         tv_add_shop_car = findViewById(R.id.tv_add_shop_car);
         ivMark = findViewById(R.id.iv_mark);
+
+        initData();
+    }
+
+    private void initData() {
+        dataRepository = Injection.dataRepository(getContext());
+        spec();
+    }
+
+    private void spec() {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", Constants.token);
+        map.put("method", "goods.getdetial");
+        map.put("site_token", "123456");
+        map.put("id", specId + "");
+        dataRepository.spec(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                SpecBean specBean = (SpecBean) data;
+                if (specBean.isStatus()) {
+                    SpecBean.DataBean dataBean = specBean.getData();
+                    List<String> mVals = new ArrayList<>();
+                    initTag(flowlayout_size, mVals, "尺寸");
+                    List<String> mVals1 = new ArrayList<>();
+                    initTag(flowlayout_color, mVals1, "颜色");
+                    tv_price.setText("￥" + dataBean.getPrice() + "元");
+                    tv_membership_price.setText("会员价：" + dataBean.getCostprice());
+                    tv_stock.setText(dataBean.getStock() + "");
+                    Glide.with(getContext()).load(dataBean.getImage_path()).centerCrop().into(iv_shop);
+                }
+            }
+        });
     }
 
     private void initTag(TagFlowLayout flowLayout, List<String> mVals, String type) {
