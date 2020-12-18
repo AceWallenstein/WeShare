@@ -145,7 +145,7 @@
                     android:layout_toStartOf="@id/ll_share"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
+                    tools:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -199,7 +199,7 @@
                         android:layout_gravity="center_vertical"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="299.00"
+                        tools:text="299.00"
                         android:textColor="#FE4833"
                         android:textSize="15sp" />
 
@@ -209,19 +209,28 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="5dp"
-                        android:text="非会员：358.00"
+                        tools:text="非会员：358.00"
                         android:textColor="@color/grey73"
                         android:textSize="11sp" />
                 </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tv_stock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/ll_price"
+                    android:layout_toStartOf="@id/tv_sales"
+                    tools:text="库存：0"
+                    android:textColor="@color/grey73"
+                    android:textSize="13sp"/>
 
                 <TextView
+                    android:layout_marginStart="4dp"
                     android:id="@+id/tv_sales"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/ll_price"
                     android:layout_alignParentEnd="true"
-                    android:text="销量：0"
+                    tools:text="销量：0"
                     android:textColor="@color/grey73"
                     android:textSize="13sp" />
             </RelativeLayout>
@@ -357,7 +366,7 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/tv_appraise"
+                        android:id="@+id/tv_evaluation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="评价（1条）"
@@ -380,7 +389,7 @@
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:paddingTop="10dp"
-                        android:layout_below="@id/tv_appraise"
+                        android:layout_below="@id/tv_evaluation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">

@@ -46,7 +46,7 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"></activity>
 
         <activity android:name=".weshop.GroupSeckillActivity" />
-        <activity android:name=".weshop.AppraiseActivity" />
+        <activity android:name=".weshop.EvaluationActivity" />
     </application>
 
 </manifest>

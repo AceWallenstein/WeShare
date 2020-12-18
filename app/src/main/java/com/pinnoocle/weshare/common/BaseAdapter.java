@@ -3,6 +3,7 @@ package com.pinnoocle.weshare.common;
 import android.content.Context;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -37,6 +38,16 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyDataSetChanged();
     }
 
+//    @Override
+//    public void onBindViewHolder(@NonNull VH holder, int position) {
+//        if (mOnItemClickListener != null) {
+//            holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
+//        }
+//        if (mOnItemDataClickListener != null) {
+//            holder.itemView.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v, position, mDatas.get(position)));
+//
+//        }
+//    }
 
     public interface OnItemClickListener {
         void onItemViewClick(View view, int position);

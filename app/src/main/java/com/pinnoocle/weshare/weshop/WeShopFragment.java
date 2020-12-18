@@ -27,13 +27,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.MenuAdapter;
 import com.pinnoocle.weshare.adapter.RecommendAdapter;
+import com.pinnoocle.weshare.adapter.TqmAdapter;
 import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.common.Constants;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
@@ -103,7 +106,8 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     private MenuAdapter menuAdapter;
     private int page = 1;
     private RecommendAdapter recommendAdapter;
-    private List<RecommendBean.DataBean.ListBean> recommendList;
+    private List<RecommendBean.DataBean.ListBean> recommendList = new ArrayList<>();
+    private TqmAdapter tqmAdapter;
 
 
     @Override
@@ -126,6 +130,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     private void initView() {
         initMenus();
         grid();
+        initTqmList();//团购推荐
         initRecommend();
         refresh.setOnRefreshLoadMoreListener(this);
 //        initGoodsList();
@@ -154,6 +159,14 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     }
 
+    private void initTqmList() {
+        rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        tqmAdapter = new TqmAdapter(getContext());
+//        tqmAdapter.setData(list_);
+        tqmAdapter.setOnItemClickListener(this);
+        rvRecommend.setAdapter(tqmAdapter);
+    }
+
     private void initData() {
         dataRepository = Injection.dataRepository(getContext());
         homePage();
@@ -162,18 +175,20 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
 
     private void homePage() {
+        ViewLoading.show(getContext());
         Map<String, String> map = new HashMap<>();
-        map.put("token", "de6d8a1d7ae1116e6ecc1a6704934a84");
-        map.put("app.index", "app.index");
+        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("method", "app.index");
         map.put("site_token", "123456");
         dataRepository.homePage(map, new RemotDataSource.getCallback() {
             @Override
             public void onFailure(String info) {
-
+                ViewLoading.dismiss(getContext());
             }
 
             @Override
             public void onSuccess(Object data) {
+                ViewLoading.dismiss(getContext());
                 HomeBean homeBean = (HomeBean) data;
                 if (homeBean.isStatus()) {
                     menus = homeBean.getData().getCategory();
@@ -183,7 +198,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                         initBanner(list);
                     }
                     if (homeBean.getData().getTqm_list().isStatus()) {
-
+                        tqmAdapter.setData(homeBean.getData().getTqm_list().getData());
                     }
 
                 }
@@ -213,7 +228,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                         recommendList.addAll(recommendBean.getData().getList());
                         recommendAdapter.setData(recommendList);
                         refresh.finishLoadMore();
-                    }else {
+                    } else {
                         refresh.finishLoadMoreWithNoMoreData();
                     }
                 }
@@ -276,19 +291,6 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         return (int) (dp * getContext().getResources().getDisplayMetrics().density);
     }
 
-//    private void initRecommend() {
-//      rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
-//        RecommendAdapter recommendAdapter = new RecommendAdapter(getContext());
-//        List<RecommendBean> list = new ArrayList<>();
-//        recommendAdapter.setData(list);
-//        recommendAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemViewClick(View view, int position) {
-//
-//            }
-//        });
-//        rvRecommend.setAdapter(recommendAdapter);
-//    }
 
     private void initRecommend() {
         rvFavorite.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -322,7 +324,11 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
             return;
         }
         Intent intent = new Intent(getContext(), GoodsDetailActivity.class);
-        startActivity(intent);
+        RecommendBean.DataBean.ListBean listBean = recommendList.get(position);
+        if (listBean != null) {
+            intent.putExtra(Constants.ID, listBean.getId()+"");
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -333,7 +339,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-        page=1;
+        page = 1;
         recommendList.clear();
         recommend();
     }

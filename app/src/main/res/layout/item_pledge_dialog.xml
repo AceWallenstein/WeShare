@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/bg_red_dot_small"
+        android:drawablePadding="15dp"
+        android:textColor="@color/light_black"
+        android:textSize="14sp"
+        tools:text="正品保证" />
+
+    <TextView
+        android:id="@+id/tv_content"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:padding="10dp"
+        android:textColor="@color/light_black"
+        android:textSize="13sp"
+        tools:text="本店郑重保证，本店所有商品一律为正品，若购买到假冒商品，双倍赔偿。" />
+</LinearLayout>

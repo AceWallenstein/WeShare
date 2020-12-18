@@ -24,6 +24,8 @@
                 android:layout_marginStart="10dp"></Space>
 
             <TextView
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,8 +46,9 @@
                 android:text="会员价：260.00" />
 
             <TextView
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="6dp"
-                android:id="@+id/tv_stock"
+                android:id="@+id/tv_stock_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_price"
@@ -55,15 +58,17 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/tv_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tv_stock"
-                android:layout_toEndOf="@id/tv_stock"
+                android:layout_alignBottom="@id/tv_stock_text"
+                android:layout_toEndOf="@id/tv_stock_text"
                 android:textColor="@color/light_black"
                 android:textSize="12sp"
                 android:text="1000" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

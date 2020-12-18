@@ -12,38 +12,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecommendAdapter extends BaseAdapter<RecommendBean.DataBean.ListBean, RecommendAdapter.VH> {
+public class TqmAdapter extends BaseAdapter<HomeBean.DataBeanXX.TqmListBean.DataBeanX, TqmAdapter.VH> {
 
-
-
-
-    public RecommendAdapter(Context mContext) {
+    public TqmAdapter(Context mContext) {
         super(mContext);
     }
 
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new VH(LayoutInflater.from(mContext).inflate(R.layout.item_goods, parent, false));
+        return new VH(LayoutInflater.from(mContext).inflate(R.layout.item_recommend, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.tvGoodsTitle.setText(mDatas.get(position).getName());
-        holder.tvMembershipPrice.setText("￥"+mDatas.get(position).getCostprice());
-        holder.tvNonMemberPrice.setText("非会员￥"+mDatas.get(position).getPrice());
-        holder.tvPaymentNum.setText(mDatas.get(position).getBuy_count()+"人付款");
+        holder.tvRushPrice.setText("抢购价：￥" + mDatas.get(position).getPrice());
+        holder.tvDeadlineTime.setText( mDatas.get(position).getEnd_time()+"截止");
         Glide.with(mContext).load(mDatas.get(position).getImage_url()).fitCenter().into(holder.ivGoodsPic);
-        if (mOnItemClickListener != null) {
-            holder.ivShopCar.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
-            holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v,position));
-        }
     }
 
     @Override
@@ -53,18 +46,15 @@ public class RecommendAdapter extends BaseAdapter<RecommendBean.DataBean.ListBea
 
 
     public static class VH extends RecyclerView.ViewHolder {
-        @BindView(R.id.iv_goods_pic)
-        ImageView ivGoodsPic;
+
         @BindView(R.id.tv_goods_title)
         TextView tvGoodsTitle;
-        @BindView(R.id.tv_membership_price)
-        TextView tvMembershipPrice;
-        @BindView(R.id.tv_non_member_price)
-        TextView tvNonMemberPrice;
-        @BindView(R.id.tv_payment_num)
-        TextView tvPaymentNum;
-        @BindView(R.id.iv_shop_car)
-        ImageView ivShopCar;
+        @BindView(R.id.tv_rush_price)
+        TextView tvRushPrice;
+        @BindView(R.id.tv_deadline)
+        TextView tvDeadlineTime;
+        @BindView(R.id.iv_goods_pic)
+        ImageView ivGoodsPic;
 
         public VH(@NonNull View itemView) {
             super(itemView);

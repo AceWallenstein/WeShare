@@ -100,6 +100,7 @@ dependencies {
     //评分控件
     implementation 'com.github.KaelLi1989:NiceRatingBar:1.0.0'
 
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 
 

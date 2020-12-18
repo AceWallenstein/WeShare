@@ -38,7 +38,11 @@ public class MenuAdapter extends BaseAdapter<HomeBean.DataBeanXX.CategoryBean, M
             holder.menuName.setTextColor(mContext.getResources().getColor(R.color.light_black));
             holder.menuName.setTextSize(14);
         }
-        holder.menuName.setText(mDatas.get(position).getName());
+        if(position==0){
+            holder.menuName.setText("推荐");
+            return;
+        }
+        holder.menuName.setText(mDatas.get(position-1).getName());
         holder.menuName.setOnClickListener((v -> {
             mOnItemClickListener.onItemViewClick(v, position);
         }));
@@ -46,7 +50,7 @@ public class MenuAdapter extends BaseAdapter<HomeBean.DataBeanXX.CategoryBean, M
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas.size()+1;
     }
 
 

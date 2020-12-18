@@ -1,6 +1,9 @@
 package com.pinnoocle.weshare.weshop;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,10 +14,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.lxj.xpopup.XPopup;
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.GoodsDetailBean;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.common.Constants;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
 import com.pinnoocle.weshare.mine.ShopCarActivity;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.widget.DialogCoupons;
 import com.pinnoocle.weshare.widget.DialogPledge;
@@ -24,8 +33,11 @@ import com.youth.banner.adapter.BannerImageAdapter;
 import com.youth.banner.holder.BannerImageHolder;
 import com.youth.banner.listener.OnPageChangeListener;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +61,7 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     @BindView(R.id.tv_price)
     TextView tvPrice;
     @BindView(R.id.tv_underlined_price)
-    TextView tvUnderlinedPrice;
+    TextView tvNoMemberPrice;
     @BindView(R.id.ll_price)
     LinearLayout llPrice;
     @BindView(R.id.tv_sales)
@@ -74,8 +86,8 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     TextView tvPledge2;
     @BindView(R.id.rl_pledge)
     RelativeLayout rlPledge;
-    @BindView(R.id.tv_appraise)
-    TextView tvAppraise;
+    @BindView(R.id.tv_evaluation)
+    TextView tvEvaluation;
     @BindView(R.id.tv_more)
     TextView tvMore;
     @BindView(R.id.rl_appraise)
@@ -90,26 +102,80 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     ImageView ivCustomerService;
     @BindView(R.id.iv_shop_car)
     ImageView ivShopCar;
-    private List<Integer> mList;
+    @BindView(R.id.tv_stock)
+    TextView tvStock;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    private List<String> bannerList;
     private boolean flag = false;
+    private DataRepository dataRepository;
+    private DialogPledge dialogPledge;
+    private List<GoodsDetailBean.DataBean.ServiceBean> service;
+    private int specId;//规格id
+    private GoodsDetailBean.DataBean dataBean;
 
     protected void onCreate(Bundle savedInstanceState) {
-        initTransparent();
+        initWhite();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_goods_detail);
         ButterKnife.bind(this);
         initView();
+        initData();
     }
 
+
     private void initView() {
-        mList = new ArrayList<>();
-        mList.add(R.mipmap.delete_2);
-        mList.add(R.mipmap.delete_3);
-        mList.add(R.mipmap.delete_4);
+//        initBanner();
+//        banner.setCurrentItem(0);
+
+    }
+
+    private void initData() {
+        dataRepository = Injection.dataRepository(this);
+        goodsDetail();
+    }
+
+    private void goodsDetail() {
+        ViewLoading.show(this);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", Constants.token);
+        map.put("method", "goods.getdetial");
+        map.put("site_token", "123456");
+        map.put("id", getIntent().getStringExtra(Constants.ID));
+        dataRepository.goodsDetail(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(GoodsDetailActivity.this);
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(GoodsDetailActivity.this);
+                GoodsDetailBean goodsDetailBean = (GoodsDetailBean) data;
+                if (goodsDetailBean.isStatus()) {
+                    tvGoodsTitle.setText(goodsDetailBean.getData().getName());
+                    tvPrice.setText(goodsDetailBean.getData().getPrice());
+                    tvNoMemberPrice.setText("非会员："+goodsDetailBean.getData().getCostprice());
+                    tvStock.setText("库存：" + goodsDetailBean.getData().getTotal_stock());
+                    tvSales.setText("销量：" + goodsDetailBean.getData().getBuy_count());
+                    initBanner(goodsDetailBean.getData().getAlbum());
+                    service = goodsDetailBean.getData().getService();
+                    dataBean = goodsDetailBean.getData();
+                    specId = goodsDetailBean.getData().getProduct().getId();
+                    tvContent.setText(Html.fromHtml(goodsDetailBean.getData().getIntro(), imgGetter, null));
+                    tvEvaluation.setText("评价（"+goodsDetailBean.getData().getComments_count()+"条）");
+                }
+            }
+        });
+    }
+
+    private void initBanner(List<String> album) {
+        bannerList = new ArrayList<>();
+        bannerList = album;
         banner.isAutoLoop(false)
-                .setAdapter(new BannerImageAdapter<Integer>(mList) {
+                .setAdapter(new BannerImageAdapter<String>(bannerList) {
                     @Override
-                    public void onBindView(BannerImageHolder holder, Integer data, int position, int size) {
+                    public void onBindView(BannerImageHolder holder, String data, int position, int size) {
                         //图片加载自己实现
                         Glide.with(holder.itemView)
                                 .load(data)
@@ -119,8 +185,7 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                 })
                 .isAutoLoop(false)
                 .addOnPageChangeListener(this);
-        bannerIndicator.setText("1/" + mList.size());
-//        banner.setCurrentItem(0);
+        bannerIndicator.setText("1/" + bannerList.size());
     }
 
     @OnClick({R.id.iv_back, R.id.ll_share, R.id.rl_discount, R.id.rl_select, R.id.rl_pledge, R.id.tv_more, R.id.tv_add_shop_car, R.id.tv_buy, R.id.iv_mark, R.id.iv_customer_service, R.id.iv_shop_car})
@@ -141,7 +206,7 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                 showPledgeDialog();
                 break;
             case R.id.tv_more:
-                ActivityUtils.startActivity(this, AppraiseActivity.class);
+                ActivityUtils.startActivity(this, EvaluationActivity.class);
                 break;
             case R.id.tv_add_shop_car:
                 showShopCarDialog();
@@ -175,7 +240,7 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     private void showShopCarDialog() {
         new XPopup.Builder(this)
                 .enableDrag(false)
-                .asCustom(new DialogShopCar(this, getSupportFragmentManager()))
+                .asCustom(new DialogShopCar(this, getSupportFragmentManager(),dataBean ))
                 .show();
     }
 
@@ -189,14 +254,15 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     private void showSelectDialog() {
         new XPopup.Builder(this)
                 .enableDrag(false)
-                .asCustom(new DialogShopCar(this, getSupportFragmentManager()))
+                .asCustom(new DialogShopCar(this, getSupportFragmentManager(),dataBean))
                 .show();
     }
 
     private void showPledgeDialog() {
+        dialogPledge = new DialogPledge(this,service);
         new XPopup.Builder(this)
                 .enableDrag(false)
-                .asCustom(new DialogPledge(this))
+                .asCustom(dialogPledge)
                 .show();
     }
 
@@ -208,11 +274,31 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
     @Override
     public void onPageSelected(int position) {
         int realposition = position + 1;
-        bannerIndicator.setText(realposition + "/" + mList.size());
+        bannerIndicator.setText(realposition + "/" + bannerList.size());
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
 
     }
+    Html.ImageGetter imgGetter = new Html.ImageGetter() {
+        public Drawable getDrawable(String source) {
+            Log.i("RG", "source---?>>>" + source);
+            Drawable drawable = null;
+            URL url;
+            try {
+                url = new URL(source);
+                Log.i("RG", "url---?>>>" + url);
+                drawable = Drawable.createFromStream(url.openStream(), ""); // 获取网路图片
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight());
+            Log.i("RG", "url---?>>>" + url);
+            return drawable;
+        }
+    };
+
 }
