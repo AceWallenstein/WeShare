@@ -103,5 +103,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
 
+    //floatingbutton
+    implementation 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
+
+
 
 }

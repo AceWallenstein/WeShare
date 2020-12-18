@@ -154,12 +154,14 @@
                         android:background="#F6F5F5" />
 
                     <com.pinnoocle.weshare.widget.TagsGridView
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:id="@+id/gridView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:gravity="center"
-                        android:numColumns="5" />
+                        android:numColumns="4" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -64,15 +64,21 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
     TagsGridView gridMyService;
     private Unbinder unbinder;
 
-    private int[] icon = {R.mipmap.to_be_paid, R.mipmap.ready_for_shipment, R.mipmap.to_be_received, R.mipmap.flash_sale,
-            R.mipmap.flash_sale};
-    private String[] iconName = {"待付款", "待发货", "待收货", "团抢订单", "抽奖订单"};
+    //    private int[] icon = {R.mipmap.to_be_paid, R.mipmap.ready_for_shipment, R.mipmap.to_be_received, R.mipmap.flash_sale,
+//            R.mipmap.flash_sale};
+    private int[] icon = {R.mipmap.to_be_paid, R.mipmap.ready_for_shipment, R.mipmap.to_be_received, R.mipmap.flash_sale
+    };
+    //    private String[] iconName = {"待付款", "待发货", "待收货", "团抢订单", "抽奖订单"};
+    private String[] iconName = {"待付款", "待发货", "待收货", "团抢订单"};
     private SimpleAdapter sim_adapter;
     private ArrayList<Map<String, Object>> data_list;
 
+    //    private int[] serviceIcon = {R.mipmap.mark, R.mipmap.shopping_cart_full, R.mipmap.qr_code, R.mipmap.recharge_account,
+//            R.mipmap.suggestions, R.mipmap.invite_friends, R.mipmap.address, R.mipmap.lucky_draw_records};
     private int[] serviceIcon = {R.mipmap.mark, R.mipmap.shopping_cart_full, R.mipmap.qr_code, R.mipmap.recharge_account,
-            R.mipmap.suggestions, R.mipmap.invite_friends, R.mipmap.address, R.mipmap.lucky_draw_records};
-    private String[] serviceIconName = {"收藏", "购物车", "邀请推广", "账户明细", "建议", "朋友圈", "收货地址", "抽奖记录"};
+            R.mipmap.suggestions, R.mipmap.invite_friends, R.mipmap.address};
+    //    private String[] serviceIconName = {"收藏", "购物车", "邀请推广", "账户明细", "建议", "朋友圈", "收货地址", "抽奖记录"};
+    private String[] serviceIconName = {"收藏", "购物车", "邀请推广", "账户明细", "建议", "朋友圈", "收货地址"};
     private ArrayList<Map<String, Object>> serviceDataList;
     private GridOrderAdapter gridOrderAdapter;
     private int num = 199;
