@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+    public List<T> getData() {
+        return mDatas;
+    }
+
     protected List<T> mDatas = new ArrayList<>();
     protected Context mContext;
 
@@ -56,5 +60,4 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
     public interface OnItemDataClickListener<T> {
         void onItemViewClick(View view, int position, T t);
     }
-
 }
