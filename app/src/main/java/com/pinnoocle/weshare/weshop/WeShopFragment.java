@@ -19,6 +19,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,16 +28,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.dd.ShadowLayout;
 import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.MenuAdapter;
 import com.pinnoocle.weshare.adapter.RecommendAdapter;
 import com.pinnoocle.weshare.adapter.TqmAdapter;
+import com.pinnoocle.weshare.bean.AddCartBean;
 import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 import com.pinnoocle.weshare.common.Constants;
+import com.pinnoocle.weshare.mine.ShoppingCartActivity;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
@@ -58,6 +62,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /*
@@ -89,6 +94,10 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     TextView tvFavorite;
     @BindView(R.id.refresh)
     SmartRefreshLayout refresh;
+    @BindView(R.id.scrollview)
+    NestedScrollView scrollview;
+    @BindView(R.id.fab_top)
+    ShadowLayout fab_top;
 
 
     private Unbinder unbinder;
@@ -156,7 +165,16 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                 return false;
             }
         });
-
+        scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY > 0) {
+                    fab_top.setVisibility(View.VISIBLE);
+                } else {
+                    fab_top.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void initTqmList() {
@@ -233,6 +251,33 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                     }
                 }
             }
+        });
+    }
+
+    private void addCart(int product_id, int nums) {
+        ViewLoading.show(getContext());
+        Map<String, String> map = new HashMap<>();
+        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("method", "cart.add");
+        map.put("site_token", "123456");
+        map.put("product_id", product_id+"");
+        map.put("nums", nums+"");
+        dataRepository.addCart(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(getContext());
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(getContext());
+                AddCartBean addCartBean = (AddCartBean) data;
+                if (addCartBean.isStatus()) {
+                    ToastUtils.showToast("加入购物车成功！");
+                }
+
+            }
+
         });
     }
 
@@ -319,14 +364,14 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     @Override
     public void onItemViewClick(View view, int position) {
+        RecommendBean.DataBean.ListBean listBean = recommendList.get(position);
         if (view.getId() == R.id.iv_shop_car) {
-            ToastUtils.showToast("加入购物车");
+            addCart(listBean.getProduct().getId(),1);
             return;
         }
         Intent intent = new Intent(getContext(), GoodsDetailActivity.class);
-        RecommendBean.DataBean.ListBean listBean = recommendList.get(position);
         if (listBean != null) {
-            intent.putExtra(Constants.ID, listBean.getId()+"");
+            intent.putExtra(Constants.ID, listBean.getId() + "");
             startActivity(intent);
         }
     }
@@ -342,6 +387,18 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         page = 1;
         recommendList.clear();
         recommend();
+    }
+
+    @OnClick({R.id.fab_shop_car, R.id.fab_top})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fab_shop_car:
+                ActivityUtils.startActivity(getContext(), ShoppingCartActivity.class);
+                break;
+            case R.id.fab_top:
+                scrollview.scrollTo(0, 0);
+                break;
+        }
     }
 
     public class ImageHolderCreator implements HolderCreator {

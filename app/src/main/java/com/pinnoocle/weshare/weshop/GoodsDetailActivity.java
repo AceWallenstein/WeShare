@@ -21,7 +21,7 @@ import com.pinnoocle.weshare.bean.GoodsDetailBean;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.common.Constants;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
-import com.pinnoocle.weshare.mine.ShopCarActivity;
+import com.pinnoocle.weshare.mine.ShoppingCartActivity;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
@@ -229,7 +229,7 @@ public class GoodsDetailActivity extends BaseActivity implements OnPageChangeLis
                 break;
 
             case R.id.iv_shop_car:
-                ActivityUtils.startActivity(this, ShopCarActivity.class);
+                ActivityUtils.startActivity(this, ShoppingCartActivity.class);
                 break;
         }
     }

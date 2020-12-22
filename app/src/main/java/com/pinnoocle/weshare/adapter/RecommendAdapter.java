@@ -48,7 +48,7 @@ public class RecommendAdapter extends BaseAdapter<RecommendBean.DataBean.ListBea
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 

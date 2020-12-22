@@ -37,7 +37,7 @@ public class ItemPledgeDialogAdapter extends BaseAdapter<GoodsDetailBean.DataBea
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 

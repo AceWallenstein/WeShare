@@ -205,7 +205,9 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
 
-    @OnClick({R.id.tv_modification_personal_data, R.id.ll_available_balance, R.id.ll_account_balance, R.id.ll_my_coupons, R.id.iv_membership_area, R.id.tv_all_order})
+    @OnClick({R.id.tv_modification_personal_data, R.id.ll_available_balance, R.id.ll_account_balance, R.id.ll_my_coupons, R.id.iv_membership_area
+            , R.id.iv_head, R.id.tv_all_order})
+
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_available_balance:
@@ -229,6 +231,9 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 intent.putExtra("type", Type.All);
                 startActivity(intent);
                 break;
+            case R.id.iv_head:
+                ActivityUtils.startActivity(getActivity(), PersonalDataActivity.class);
+                break;
         }
     }
 
@@ -239,7 +244,7 @@ public class MineFragment extends Fragment implements AdapterView.OnItemClickLis
                 ActivityUtils.startActivity(getActivity(), MyCollectionActivity.class);
                 break;
             case 1://购物车
-                ActivityUtils.startActivity(getActivity(), ShopCarActivity.class);
+                ActivityUtils.startActivity(getActivity(), ShoppingCartActivity.class);
                 break;
             case 2://邀请推广
                 showPopUpWindow();

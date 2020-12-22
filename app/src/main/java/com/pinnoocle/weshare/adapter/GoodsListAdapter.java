@@ -64,7 +64,7 @@ public class GoodsListAdapter extends BaseAdapter<GoodsBean, RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return mDatas.size() + 1;
+        return mDatas == null ? 0 : mDatas.size() + 1;
     }
 
 

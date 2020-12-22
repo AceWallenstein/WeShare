@@ -19,15 +19,12 @@ import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.GoodsDetailBean;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
-import com.pinnoocle.weshare.mine.ShopCarActivity;
+import com.pinnoocle.weshare.mine.ShoppingCartActivity;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.timmy.tdialog.TDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -226,7 +223,7 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
                 break;
 
             case R.id.iv_shop_car:
-                ActivityUtils.startActivity(getContext(), ShopCarActivity.class);
+                ActivityUtils.startActivity(getContext(), ShoppingCartActivity.class);
                 break;
         }
     }

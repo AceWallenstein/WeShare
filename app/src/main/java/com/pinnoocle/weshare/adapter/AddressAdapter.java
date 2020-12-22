@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.AddressBean;
+import com.pinnoocle.weshare.bean.UserShipBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddressAdapter extends BaseAdapter<AddressBean, AddressAdapter.VH> {
+public class AddressAdapter extends BaseAdapter<UserShipBean.DataBean, AddressAdapter.VH> {
 
     public AddressAdapter(Context mContext) {
         super(mContext);
@@ -36,10 +37,10 @@ public class AddressAdapter extends BaseAdapter<AddressBean, AddressAdapter.VH> 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
         holder.tvPersonName.setText(mDatas.get(position).getName());
-        if (!TextUtils.isEmpty(mDatas.get(position).getPhone()) && mDatas.get(position).getPhone().length() > 6) {
+        if (!TextUtils.isEmpty(mDatas.get(position).getMobile()) && mDatas.get(position).getMobile().length() > 6) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < mDatas.get(position).getPhone().length(); i++) {
-                char c = mDatas.get(position).getPhone().charAt(i);
+            for (int i = 0; i < mDatas.get(position).getMobile().length(); i++) {
+                char c = mDatas.get(position).getMobile().charAt(i);
                 if (i >= 3 && i <= 6) {
                     sb.append('*');
                 } else {
@@ -48,7 +49,7 @@ public class AddressAdapter extends BaseAdapter<AddressBean, AddressAdapter.VH> 
             }
             holder.tvPhone.setText(sb.toString());
         }
-        holder.tvAddress.setText(mDatas.get(position).getAddress());
+        holder.tvAddress.setText(mDatas.get(position).getAddress()+mDatas.get(position).getArea_name());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -64,7 +65,7 @@ public class AddressAdapter extends BaseAdapter<AddressBean, AddressAdapter.VH> 
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 

@@ -32,4 +32,16 @@ public interface RemotDataSource {
 
     void goodsEvaluation(Map<String, String> queryMap, getCallback callback);
 
+    void personalCenter(Map<String, String> queryMap, getCallback callback);
+
+    void shoppingCartList(Map<String, String> queryMap, getCallback callback);
+
+    void deleteCart(Map<String, String> queryMap, getCallback callback);
+
+    void getUserShip(Map<String, String> queryMap, getCallback callback);
+
+    void saveUserShip(Map<String, String> queryMap, getCallback callback);
+
+    void addCart(Map<String, String> queryMap, getCallback callback);
+
 }

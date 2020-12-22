@@ -54,6 +54,7 @@
             android:text="取消"/>
 
         <TextView
+            android:id="@+id/tv_edit"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,6 +83,7 @@
             android:gravity="center_vertical"
             >
             <CheckBox
+                android:clickable="false"
                 android:layout_centerVertical="true"
                 android:id="@+id/checkbox"
                 android:padding="5dp"
@@ -107,6 +109,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_total_price"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,6 +130,21 @@
             android:textColor="@color/white"
             android:textSize="19sp"
             android:background="@drawable/bg_btn_settlement"/>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_delete"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="删除"
+            android:textColor="@color/light_black"
+            android:textSize="19sp"
+          />
+
 
     </RelativeLayout>
 </RelativeLayout>

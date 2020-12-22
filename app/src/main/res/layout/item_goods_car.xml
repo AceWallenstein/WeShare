@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,11 +28,11 @@
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/mCheckedCb"
         android:scaleType="fitXY"
-        android:src="@mipmap/sample" />
+         />
 
     <TextView
         android:layout_alignTop="@id/mGoodsIconIv"
-        android:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
+        tools:text="轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女"
         android:id="@+id/mGoodsDescTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +46,7 @@
  />
 
     <TextView
-        android:text="杏色；xs"
+        tools:text="杏色；xs"
         android:id="@+id/mGoodsSkuTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,7 +58,7 @@
       />
 
     <TextView
-        android:text="￥299.00"
+        tools:text="￥299.00"
         android:id="@+id/mGoodsPriceTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -68,6 +70,7 @@
  />
 
     <ren.qinc.numberbutton.NumberButton
+        app:editable="false"
         app:buttonWidth="30dp"
         app:textWidth ="50dp"
         app:textSize="4sp"

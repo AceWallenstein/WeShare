@@ -44,7 +44,7 @@ public class ClassificationAdapter extends BaseAdapter<String, ClassificationAda
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
     public void setPos(int position) {

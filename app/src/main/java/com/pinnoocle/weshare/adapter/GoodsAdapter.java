@@ -49,7 +49,7 @@ public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 

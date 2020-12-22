@@ -4,8 +4,6 @@ import android.content.Context;
 
 import java.util.Map;
 
-import okhttp3.MultipartBody;
-
 /**
  * Created by whs on 2017/5/18
  */
@@ -61,5 +59,39 @@ public class DataRepository implements RemotDataSource {
     public void goodsEvaluation(Map<String, String> queryMap, getCallback callback) {
         mRemoteDataSource.goodsEvaluation(queryMap, callback);
 
+    }
+
+    @Override
+    public void personalCenter(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.personalCenter(queryMap, callback);
+    }
+
+    @Override
+    public void shoppingCartList(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.shoppingCartList(queryMap, callback);
+
+    }
+
+    @Override
+    public void deleteCart(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.deleteCart(queryMap, callback);
+
+    }
+
+    @Override
+    public void getUserShip(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getUserShip(queryMap, callback);
+
+    }
+
+    @Override
+    public void saveUserShip(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.saveUserShip(queryMap, callback);
+
+    }
+
+    @Override
+    public void addCart(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.addCart(queryMap, callback);
     }
 }

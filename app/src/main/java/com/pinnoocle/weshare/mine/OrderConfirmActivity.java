@@ -19,9 +19,14 @@ import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.OrderAdapter;
 import com.pinnoocle.weshare.adapter.OrderConfirmAdapter;
 import com.pinnoocle.weshare.bean.AddressBean;
+import com.pinnoocle.weshare.bean.UserShipBean;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.event.SelectAddressEvent;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 
@@ -100,7 +105,7 @@ public class OrderConfirmActivity extends BaseActivity {
         recyclerView.setAdapter(orderAdapter);
     }
 
-    @OnClick({R.id.iv_back, R.id.rl_pay_mode_wechat, R.id.rl_pay_mode_balance,R.id.ll_address})
+    @OnClick({R.id.iv_back, R.id.rl_pay_mode_wechat, R.id.rl_pay_mode_balance, R.id.ll_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -113,27 +118,23 @@ public class OrderConfirmActivity extends BaseActivity {
                 switchPayMode(ivRightMark2, ivRightMark1);
                 break;
             case R.id.ll_address:
-//                ActivityUtils.startActivityForResult(this,AddressActivity.class,9);
-                Intent intent = new Intent(this,AddressActivity.class);
-                intent.putExtra("from","from");
-                startActivityForResult(intent,9);
+                ActivityUtils.startActivity(this, AddressActivity.class);
+//                Intent intent = new Intent(this,AddressActivity.class);
+//                intent.putExtra("from","from");
+//                startActivityForResult(intent,9);
 
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==9&&resultCode==1){
-            Serializable serializable = data.getSerializableExtra("addressBean");
-            AddressBean address = (AddressBean) serializable;
-            tvName.setText(address.getName());
-            String phone = address.getPhone();
-            String phone1 = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
-            tvPhone.setText(phone1);
-            tvAddress.setText(address.getAddress());
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
+    public void onEvent(SelectAddressEvent event) {
+        UserShipBean.DataBean dataBean = event.getDataBean();
+        tvName.setText(dataBean.getName());
+        String phone = dataBean.getMobile();
+        String phone1 = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+        tvPhone.setText(phone1);
+        tvAddress.setText(dataBean.getAddress() + dataBean.getArea_name());
     }
 
     private void switchPayMode(ImageView imageView1, ImageView imageView2) {
@@ -142,6 +143,7 @@ public class OrderConfirmActivity extends BaseActivity {
         if (imageView2.getVisibility() == View.VISIBLE)
             imageView2.setVisibility(View.GONE);
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

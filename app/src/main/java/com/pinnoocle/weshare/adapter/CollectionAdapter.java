@@ -49,7 +49,7 @@ public class CollectionAdapter extends BaseAdapter<GoodsBean, CollectionAdapter.
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 

@@ -41,7 +41,7 @@ public class TqmAdapter extends BaseAdapter<HomeBean.DataBeanXX.TqmListBean.Data
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mDatas == null ? 0 : mDatas.size();
     }
 
 
