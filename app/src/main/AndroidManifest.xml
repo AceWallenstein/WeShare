@@ -33,17 +33,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="82d522a71eff8c76d75e659569ac177c"/>
-<!--        //开发者申请的key-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="82d522a71eff8c76d75e659569ac177c" />
+        <!--        //开发者申请的key-->
 
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".mine.PersonalDataActivity" />
         <activity android:name=".mine.AccountBalanceActivity" />
@@ -66,7 +64,30 @@
 
         <activity android:name=".weshop.GroupSeckillActivity" />
         <activity android:name=".weshop.EvaluationActivity" />
-        <service android:name="com.amap.api.location.APSService"></service>
+        <activity android:name=".mine.EditAddressActivity" />
+        <activity android:name=".mine.JinYuanActivity" />
+        <activity android:name=".mine.SignInActivity" />
+        <activity android:name=".mine.JinYuanDetailActivity" />
+        <activity android:name=".weshop.GoodClassificationActivity" />
+        <activity android:name=".weshop.ArticleActivity" />
+        <activity android:name=".login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pinnoocle.weshare"
+            />
+
+        <service
+            android:name="com.amap.api.location.APSService"
+            android:exported="true"></service>
 
     </application>
 

@@ -1,9 +1,11 @@
 package com.pinnoocle.weshare.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +17,11 @@ import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 //导航栏菜单adapter
 public class MenuAdapter extends BaseAdapter<HomeBean.DataBeanXX.CategoryBean, MenuAdapter.VH> {
-
+    private int[] icons = new int[]{R.mipmap.food, R.mipmap.wash, R.mipmap.baihuo, R.mipmap.children, R.mipmap.home_furnishing,
+            R.mipmap.beautiful, R.mipmap.ornaments, R.mipmap.women_wear, R.mipmap.shoes, R.mipmap.home_more};
 
     public MenuAdapter(Context mContext) {
         super(mContext);
@@ -31,32 +35,31 @@ public class MenuAdapter extends BaseAdapter<HomeBean.DataBeanXX.CategoryBean, M
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        if (position == 0) {
-            holder.menuName.setTextColor(mContext.getResources().getColor(R.color.red));
-            holder.menuName.setTextSize(15);
-        }else {
-            holder.menuName.setTextColor(mContext.getResources().getColor(R.color.light_black));
-            holder.menuName.setTextSize(14);
-        }
-        if(position==0){
-            holder.menuName.setText("推荐");
+        if (mDatas == null||mDatas.size()==0) {
             return;
         }
-        holder.menuName.setText(mDatas.get(position-1).getName());
-        holder.menuName.setOnClickListener((v -> {
+        if (position == 9) {
+            holder.menuName.setText("更多");
+        } else {
+            holder.menuName.setText(mDatas.get(position).getName());
+        }
+        holder.image.setImageResource(icons[position]);
+        holder.itemView.setOnClickListener((v -> {
             mOnItemClickListener.onItemViewClick(v, position);
         }));
     }
 
     @Override
     public int getItemCount() {
-        return mDatas == null ? 0 : mDatas.size()+1;
+        return mDatas == null ? 0 : icons.length;
     }
 
 
     public static class VH extends RecyclerView.ViewHolder {
         @BindView(R.id.menu_name)
         TextView menuName;
+        @BindView(R.id.image)
+        ImageView image;
 
 
         public VH(@NonNull View itemView) {

@@ -9,6 +9,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
+import com.pinnoocle.weshare.BuildConfig;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.HomeBean;
 
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -35,6 +37,7 @@ public class RetrofitHelper {
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
     private static RetrofitHelper instance = null;
     private Retrofit mRetrofit = null;
+    private final HttpLoggingInterceptor logging;
 
     public static RetrofitHelper getInstance(Context context) {
         if (instance == null) {
@@ -47,6 +50,8 @@ public class RetrofitHelper {
     private RetrofitHelper(Context mContext) {
         this.mContext = mContext;
         networkMonitor = new LiveNetworkMonitor(mContext);
+        logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         init();
     }
 
@@ -58,6 +63,10 @@ public class RetrofitHelper {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder.addNetworkInterceptor(new MyNetworkInterceptor());
         okHttpClientBuilder.addInterceptor(new UrlInterceptor());
+        if (BuildConfig.DEBUG) {
+            okHttpClientBuilder.addInterceptor(logging);
+        }
+
         //5秒超时
         okHttpClientBuilder.connectTimeout(20, TimeUnit.SECONDS);
 
@@ -68,12 +77,13 @@ public class RetrofitHelper {
                 .addConverterFactory(GsonConverterFactory.create(initGson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
+
     }
 
     private Gson initGson() {
 
         Gson gson = new GsonBuilder()
-                 .setLenient()
+                .setLenient()
                 .create();
         return gson;
     }

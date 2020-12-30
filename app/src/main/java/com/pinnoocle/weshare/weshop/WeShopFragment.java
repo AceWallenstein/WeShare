@@ -19,10 +19,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,23 +40,31 @@ import com.pinnoocle.weshare.bean.HomeBean;
 import com.pinnoocle.weshare.bean.RecommendBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 import com.pinnoocle.weshare.common.Constants;
+import com.pinnoocle.weshare.event.GoodsSearchEvent;
 import com.pinnoocle.weshare.mine.ShoppingCartActivity;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
+import com.pinnoocle.weshare.utils.FastData;
 import com.pinnoocle.weshare.utils.ScreenUtil;
 import com.pinnoocle.weshare.widget.TagsGridView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.sunfusheng.marqueeview.MarqueeView;
 import com.to.aboomy.banner.Banner;
 import com.to.aboomy.banner.HolderCreator;
 import com.to.aboomy.banner.IndicatorView;
 import com.to.aboomy.banner.ScaleInTransformer;
 
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -98,15 +106,42 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     NestedScrollView scrollview;
     @BindView(R.id.fab_top)
     ShadowLayout fab_top;
+    @BindView(R.id.marqueeView)
+    MarqueeView marqueeView;
+    @BindView(R.id.iv_picture)
+    ImageView ivPicture;
+    @BindView(R.id.tv_type)
+    TextView tvType;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+    @BindView(R.id.iv_picture1)
+    ImageView ivPicture1;
+    @BindView(R.id.tv_type1)
+    TextView tvType1;
+    @BindView(R.id.tv_time1)
+    TextView tvTime1;
+    @BindView(R.id.iv_picture2)
+    ImageView ivPicture2;
+    @BindView(R.id.tv_type2)
+    TextView tvType2;
+    @BindView(R.id.tv_time2)
+    TextView tvTime2;
+    @BindView(R.id.cardView)
+    CardView cardView;
+    @BindView(R.id.cardView1)
+    CardView cardView1;
+    @BindView(R.id.cardView2)
+    CardView cardView2;
 
 
     private Unbinder unbinder;
     //    private int[] icon = {R.mipmap.groupon_seckill, R.mipmap.hot_selling_mall, R.mipmap.luck_draw, R.mipmap.recommend,
 //            R.mipmap.tiao_sao_market};
-    private int[] icon = {R.mipmap.groupon_seckill, R.mipmap.hot_selling_mall, R.mipmap.luck_draw, R.mipmap.recommend};
+    private int[] icon = {R.mipmap.food, R.mipmap.wash, R.mipmap.baihuo, R.mipmap.children, R.mipmap.home_furnishing,
+            R.mipmap.beautiful, R.mipmap.ornaments, R.mipmap.women_wear, R.mipmap.shoes, R.mipmap.home_more};
 //    private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐", "跳蚤市场"};
 
-    private String[] iconName = {"团购秒杀", "热卖商城", "0元抽奖", "想买与推荐"};
+    private String[] iconName = {"食品", "洗护", "百货", "儿童母婴", "家居", "美妆", "饰品", "女装", "鞋靴", "更多"};
 
     List<HomeBean.DataBeanXX.CategoryBean> menus = new ArrayList<>();
     private SimpleAdapter sim_adapter;
@@ -117,12 +152,31 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     private RecommendAdapter recommendAdapter;
     private List<RecommendBean.DataBean.ListBean> recommendList = new ArrayList<>();
     private TqmAdapter tqmAdapter;
+    private String notice_list;
+    private List<String> titles = new ArrayList<>();
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        marqueeView.startFlipping();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        marqueeView.stopFlipping();
     }
 
     @Override
@@ -138,7 +192,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
     private void initView() {
         initMenus();
-        grid();
+//        grid();
         initTqmList();//团购推荐
         initRecommend();
         refresh.setOnRefreshLoadMoreListener(this);
@@ -157,8 +211,10 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                     } else {
                         Intent intent = new Intent(getContext(), GoodsListActivity.class);
                         intent.putExtra("title", "热卖商城");
+                        String searchName = edSearch.getText().toString();
+//                        EventBus.getDefault().post(new GoodsSearchEvent(searchName));
+                        intent.putExtra("searchName", searchName);
                         getActivity().startActivity(intent);
-
                     }
                     return true;
                 }
@@ -178,6 +234,22 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
     private void initTqmList() {
+
+    }
+
+    private void initMarqueeView() {
+        marqueeView.startWithList(titles);
+        marqueeView.setOnItemClickListener(new MarqueeView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, TextView textView) {
+//                Intent intent1 = new Intent(getContext(), NoticeActivity.class);
+//                intent1.putExtra("id", adList.get(position).getId());
+//                startActivity(intent1);
+            }
+        });
+    }
+
+    private void initTqmList_() {  //不使用
         rvRecommend.setLayoutManager(new GridLayoutManager(getContext(), 2));
         tqmAdapter = new TqmAdapter(getContext());
 //        tqmAdapter.setData(list_);
@@ -195,7 +267,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     private void homePage() {
         ViewLoading.show(getContext());
         Map<String, String> map = new HashMap<>();
-        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("token", FastData.getToken());
         map.put("method", "app.index");
         map.put("site_token", "123456");
         dataRepository.homePage(map, new RemotDataSource.getCallback() {
@@ -215,13 +287,59 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                         List<HomeBean.DataBeanXX.BannerBean.DataBean.ListBean> list = homeBean.getData().getBanner().getData().getList();
                         initBanner(list);
                     }
+                    notice_list = homeBean.getData().getNotice_list();
+                    try {
+                        dealJson(notice_list);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    initMarqueeView();
                     if (homeBean.getData().getTqm_list().isStatus()) {
-                        tqmAdapter.setData(homeBean.getData().getTqm_list().getData());
+//                        tqmAdapter.setData(homeBean.getData().getTqm_list().getData());
+//                        List<ImageView> pics = new ArrayList<>();
+//                        List<TextView> type = new ArrayList<>();
+//                        List<TextView> time = new ArrayList<>();
+//                        pics.add(ivPicture);
+//                        pics.add(ivPicture1);
+//                        pics.add(ivPicture2);
+//                        type.add(tvType);
+//                        type.add(tvType1);
+//                        type.add(tvType2);
+//                        time.add(tvTime);
+//                        time.add(tvTime1);
+//                        time.add(tvTime2);
+//
+//                        List<HomeBean.DataBeanXX.TqmListBean.DataBean> data1 = homeBean.getData().getTqm_list().getData();
+//                        for (int i = 0; i < data1.size(); i++) {
+//                           Glide.with(getContext()).load(data1.get(i).getImage_url()).centerCrop().into( pics.get(i));
+//                            type.get(i).setText(data1.get(i).getCat_name());
+//                            time.get(i).setText(data1.get(i).getEnd_time()+"截止");
+//                            ;
+//                        }
+                        List<HomeBean.DataBeanXX.TqmListBean.DataBean> data1 = homeBean.getData().getTqm_list().getData();
+                        Glide.with(getContext()).load(data1.get(0).getImage_url()).centerCrop().into(ivPicture);
+                        tvTime.setText(data1.get(0).getEnd_time() + "截止");  //团抢
+                        List<HomeBean.DataBeanXX.TqmList2Bean.DataBean> data2 = homeBean.getData().getTqm_list2().getData();
+                        Glide.with(getContext()).load(data2.get(0).getImage_url()).centerCrop().into(ivPicture1);
+                        tvTime1.setText(data2.get(0).getStart_time() + "开抢");//即将团抢
+
                     }
 
                 }
             }
         });
+    }
+
+    private void dealJson(String notice_list) throws JSONException {
+        JSONObject jsonObject = new JSONObject(notice_list);
+        Iterator<String> keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            List<String> list = new ArrayList<>();
+            JSONObject jsonObject1 = (JSONObject) jsonObject.get(key);
+            String title = jsonObject1.getString("title");
+            titles.add(title);
+        }
     }
 
     private void recommend() {
@@ -257,11 +375,11 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     private void addCart(int product_id, int nums) {
         ViewLoading.show(getContext());
         Map<String, String> map = new HashMap<>();
-        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("token", FastData.getToken());
         map.put("method", "cart.add");
         map.put("site_token", "123456");
-        map.put("product_id", product_id+"");
-        map.put("nums", nums+"");
+        map.put("product_id", product_id + "");
+        map.put("nums", nums + "");
         dataRepository.addCart(map, new RemotDataSource.getCallback() {
             @Override
             public void onFailure(String info) {
@@ -283,17 +401,20 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
 
 
     private void initMenus() {
-
-        rvMenus.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        rvMenus.setLayoutManager(new GridLayoutManager(getContext(), 5));
         menuAdapter = new MenuAdapter(getContext());
 //        menuAdapter.setData(menus);
         menuAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemViewClick(View view, int position) {
-                if (position == 0)
+                if (position == 9) {
+                    Intent intent = new Intent(getContext(), GoodClassificationActivity.class);
+                    getActivity().startActivity(intent);
                     return;
+                }
                 Intent intent = new Intent(getContext(), GoodsListActivity.class);
-//                intent.putExtra(Constants., menus.get(position).getId()+"");
+                intent.putExtra("title", menus.get(position).getName());
+                intent.putExtra("cat_id", menus.get(position).getId() + "");
                 getActivity().startActivity(intent);
 
             }
@@ -321,7 +442,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
                         iv.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ToastUtils.showToast(list.get(index).getCode());
+//                                ToastUtils.showToast(list.get(index).getCode());
                             }
                         });
                         return iv;
@@ -366,7 +487,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
     public void onItemViewClick(View view, int position) {
         RecommendBean.DataBean.ListBean listBean = recommendList.get(position);
         if (view.getId() == R.id.iv_shop_car) {
-            addCart(listBean.getProduct().getId(),1);
+            addCart(listBean.getProduct().getId(), 1);
             return;
         }
         Intent intent = new Intent(getContext(), GoodsDetailActivity.class);
@@ -389,7 +510,7 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
         recommend();
     }
 
-    @OnClick({R.id.fab_shop_car, R.id.fab_top})
+    @OnClick({R.id.fab_shop_car, R.id.fab_top, R.id.cardView, R.id.cardView1, R.id.cardView2, R.id.tv_more, R.id.rl_group_skill})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fab_shop_car:
@@ -398,6 +519,21 @@ public class WeShopFragment extends Fragment implements AdapterView.OnItemClickL
             case R.id.fab_top:
                 scrollview.scrollTo(0, 0);
                 break;
+            case R.id.cardView:
+                break;
+            case R.id.cardView1:
+                break;
+            case R.id.cardView2:
+                ActivityUtils.startActivity(getContext(), GroupSeckillActivity.class);
+                break;
+            case R.id.tv_more:
+                Intent intent = new Intent(getContext(), GoodsListActivity.class);
+                intent.putExtra("title", "热卖商城");
+                getActivity().startActivity(intent);                break;
+            case R.id.rl_group_skill:
+                ActivityUtils.startActivity(getContext(), GroupSeckillActivity.class);
+                break;
+
         }
     }
 

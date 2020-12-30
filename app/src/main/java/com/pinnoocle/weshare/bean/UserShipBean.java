@@ -1,5 +1,6 @@
 package com.pinnoocle.weshare.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class UserShipBean {
@@ -38,7 +39,7 @@ public class UserShipBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 15
          * user_id : 4

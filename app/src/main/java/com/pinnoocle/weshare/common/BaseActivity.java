@@ -1,8 +1,11 @@
 package com.pinnoocle.weshare.common;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -162,6 +165,34 @@ public class BaseActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.light_juice));
         }
+    }
+    public void initGold() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.gold));
+        }
+    }
+    //改变状态栏颜色
+    public void setThisStatusBarColor(int drawable) {
+        getWindow().getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                initStatusBar(drawable);
+                getWindow().getDecorView().removeOnLayoutChangeListener(this);
+            }
+        });
+
+    }
+
+    private void initStatusBar(int drawable) {
+        //利用反射机制修改状态栏背景
+        int identifier = getResources().getIdentifier("statusBarBackground", "id", "android");
+        View statusBarView = getWindow().findViewById(identifier);
+        statusBarView.setBackgroundResource(drawable);
     }
 
 }

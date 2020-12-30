@@ -18,6 +18,7 @@
         <ImageView
             tools:src="@mipmap/sample_3"
             android:id="@+id/iv_goods_pic"
+            android:scaleType="fitXY"
             android:layout_width="wrap_content"
             android:layout_height="180dp" />
 

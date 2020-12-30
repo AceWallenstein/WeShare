@@ -11,15 +11,25 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.adapter.ChildAdapter;
 import com.pinnoocle.weshare.adapter.ClassificationAdapter;
 import com.pinnoocle.weshare.adapter.GoodsListAdapter;
+import com.pinnoocle.weshare.bean.ChildCatBean;
 import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
+import com.pinnoocle.weshare.bean.TopCatBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +44,11 @@ public class GoodClassificationFragment extends Fragment implements BaseAdapter.
     @BindView(R.id.rv_goods_list)
     RecyclerView rvGoodsList;
     private Unbinder unbinder;
-    private ClassificationAdapter classhoificationAdapter;
-    private GoodsListAdapter goodsListAdapter;
-    private List<GoodsBean> list = new ArrayList<>();
     private ClassificationAdapter classificationAdapter;
+    private ChildAdapter childAdapter;
+    private DataRepository dataRepository;
+    private List<TopCatBean.DataBean> topCats;
+    private List<ChildCatBean.DataBean> childCatBeanData;
 
 
     @Override
@@ -52,63 +63,80 @@ public class GoodClassificationFragment extends Fragment implements BaseAdapter.
         View view = inflater.inflate(R.layout.fragment_good_classification, container, false);
         unbinder = ButterKnife.bind(this, view);
         initView();
-        getGoods(0);
+        initData();
         return view;
     }
 
+
     private void initView() {
         classificationAdapter = new ClassificationAdapter(getContext());
-        goodsListAdapter = new GoodsListAdapter(getContext());
         rvClassification.setLayoutManager(new LinearLayoutManager(getContext()));
         rvClassification.setAdapter(classificationAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                int type = goodsListAdapter.getItemViewType(position);
-                if (type == 1) {
-                    return 3;//banner占据3个单元格
-                }
-                return 1;
-            }
-        });
         rvGoodsList.setLayoutManager(gridLayoutManager);
-        rvGoodsList.setAdapter(goodsListAdapter);
-        List<String> classification = new ArrayList<>();
-        classification.add("女装");
-        classification.add("美妆");
-        classification.add("鞋包");
-        classification.add("内衣");
-        classification.add("百货");
-        classification.add("食品");
-        classification.add("洗护");
-        classification.add("电器");
-        classification.add("饰品");
-        classification.add("车品");
-        classification.add("保健");
-        classificationAdapter.setData(classification);
+        childAdapter = new ChildAdapter(getContext());
+        rvGoodsList.setAdapter(childAdapter);
         classificationAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemViewClick(View view, int position) {
                 classificationAdapter.setPos(position);
-                getGoods(position);
+                getChildCat(topCats.get(position).getId());
             }
         });
-        goodsListAdapter.setOnItemClickListener(this);
+        childAdapter.setOnItemClickListener(this);
     }
 
-    private void getGoods(int position) {
-        if (position == 0||position==2) {
-            list.clear();
+    private void initData() {
+        dataRepository = Injection.dataRepository(getContext());
+        getTopCat();
+    }
 
-            return;
-        }
-        list.clear();
-        GoodsBean goodsBean = new GoodsBean("润唇膏保湿滋润补水防干裂", "14.50", "15.51", R.mipmap.samlpe_5 + "", "172");
-        GoodsBean goodsBean1 = new GoodsBean("曼秀雷敦润唇膏女湿滋润", "22.50", "15.51", R.mipmap.sample_6 + "", "172");
-        list.add(goodsBean);
-        list.add(goodsBean1);
-        goodsListAdapter.setData(list);
+    private void getTopCat() {
+        ViewLoading.show(getContext());
+        Map<String, String> map = new HashMap<>();
+        map.put("method", "categories.gettopcat");
+        map.put("site_token", "123456");
+        dataRepository.getTopCat(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(getContext());
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(getContext());
+                TopCatBean topCatBean = (TopCatBean) data;
+                if (topCatBean.isStatus()) {
+                    topCats = topCatBean.getData();
+                    classificationAdapter.setData(topCats);
+                }
+                getChildCat(topCats.get(0).getId());
+            }
+        });
+    }
+
+    private void getChildCat(int parent_id) {
+        ViewLoading.show(getContext());
+        Map<String, String> map = new HashMap<>();
+        map.put("method", "categories.getchildcat");
+        map.put("site_token", "123456");
+        map.put("parent_id", parent_id + "");
+        dataRepository.getChildCat(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(getContext());
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(getContext());
+                ChildCatBean childCatBean = (ChildCatBean) data;
+                if (childCatBean.isStatus()) {
+                    childCatBeanData = childCatBean.getData();
+                    childAdapter.setData(childCatBeanData);
+                }
+            }
+        });
     }
 
     @Override
@@ -119,7 +147,9 @@ public class GoodClassificationFragment extends Fragment implements BaseAdapter.
 
     @Override
     public void onItemViewClick(View view, int position) {
-        Intent intent = new Intent();
-        ActivityUtils.startActivity(getContext(), GoodsDetailActivity.class);
+        Intent intent = new Intent(getContext(), GoodsListActivity.class);
+        intent.putExtra("title", childCatBeanData.get(position).getName());
+        intent.putExtra("cat_id", childCatBeanData.get(position).getId() + "");
+        startActivity(intent);
     }
 }

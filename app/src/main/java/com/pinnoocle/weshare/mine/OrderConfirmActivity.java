@@ -1,7 +1,6 @@
 package com.pinnoocle.weshare.mine;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,14 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.adapter.OrderAdapter;
-import com.pinnoocle.weshare.adapter.OrderConfirmAdapter;
-import com.pinnoocle.weshare.bean.AddressBean;
+import com.pinnoocle.weshare.adapter.OrderItemAdapter;
 import com.pinnoocle.weshare.bean.UserShipBean;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.event.SelectAddressEvent;
@@ -27,8 +23,6 @@ import com.pinnoocle.weshare.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +77,7 @@ public class OrderConfirmActivity extends BaseActivity {
     TextView tvActualPaymentMoney;
     @BindView(R.id.tv_go_buy)
     TextView tvGoBuy;
-    private OrderConfirmAdapter orderAdapter;
+    private OrderItemAdapter orderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +95,7 @@ public class OrderConfirmActivity extends BaseActivity {
 
         //        dataRepository = Injection.dataRepository(getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        orderAdapter = new OrderConfirmAdapter(this);
+        orderAdapter = new OrderItemAdapter(this);
         recyclerView.setAdapter(orderAdapter);
     }
 

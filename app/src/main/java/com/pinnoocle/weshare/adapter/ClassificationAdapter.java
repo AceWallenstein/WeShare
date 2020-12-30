@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
+import com.pinnoocle.weshare.bean.TopCatBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ClassificationAdapter extends BaseAdapter<String, ClassificationAdapter.VH> {
+public class ClassificationAdapter extends BaseAdapter<TopCatBean.DataBean, ClassificationAdapter.VH> {
     //item选中位置
     private int pos = 0;
 
@@ -31,11 +33,13 @@ public class ClassificationAdapter extends BaseAdapter<String, ClassificationAda
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.text.setText(mDatas.get(position));
+        holder.text.setText(mDatas.get(position).getName());
         if (position == pos) {
             holder.text.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            holder.text.setTextColor(Color.RED);
         } else {
             holder.text.setBackgroundColor(mContext.getResources().getColor(R.color.white1));
+            holder.text.setTextColor(mContext.getResources().getColor(R.color.light_black));
         }
         holder.text.setOnClickListener((v) -> {
             mOnItemClickListener.onItemViewClick(v, position);

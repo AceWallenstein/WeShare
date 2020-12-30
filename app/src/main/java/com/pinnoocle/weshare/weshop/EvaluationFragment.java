@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.EvaluationAdapter;
-import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
 import com.pinnoocle.weshare.common.BaseAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -33,8 +33,8 @@ public class EvaluationFragment extends Fragment implements OnRefreshLoadMoreLis
     private Unbinder unbinder;
     private int page = 1;
     private EvaluationAdapter evaluationadapter;
-    private List<GoodsBean> list;
-    private List<GoodsBean> mDatas = new ArrayList<>();
+    private List<GoodsBeanDelete> list;
+    private List<GoodsBeanDelete> mDatas = new ArrayList<>();
     private String type;
 
     public EvaluationFragment(String type) {

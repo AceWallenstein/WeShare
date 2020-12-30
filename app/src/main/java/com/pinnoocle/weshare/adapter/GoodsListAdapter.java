@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsListAdapter extends BaseAdapter<GoodsBean, RecyclerView.ViewHolder> {
+public class GoodsListAdapter extends BaseAdapter<GoodsBeanDelete, RecyclerView.ViewHolder> {
     public GoodsListAdapter(Context mContext) {
         super(mContext);
     }

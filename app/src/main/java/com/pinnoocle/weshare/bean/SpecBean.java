@@ -86,7 +86,7 @@ public class SpecBean {
         private String bn;
         private String image_path;
         private int total_stock;
-        private GradeInfoBean grade_info;
+        private List<GradeInfoBean> grade_info;
         private DefaultSpesDescBean default_spes_desc;
         private String amount;
         private int promotion_amount;
@@ -245,11 +245,11 @@ public class SpecBean {
             this.total_stock = total_stock;
         }
 
-        public GradeInfoBean getGrade_info() {
+        public List<GradeInfoBean> getGrade_info() {
             return grade_info;
         }
 
-        public void setGrade_info(GradeInfoBean grade_info) {
+        public void setGrade_info(List<GradeInfoBean> grade_info) {
             this.grade_info = grade_info;
         }
 

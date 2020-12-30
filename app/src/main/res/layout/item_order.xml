@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_order"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,7 +14,7 @@
         android:padding="10dp">
 
         <TextView
-            android:text="待付款"
+            tools:text="待付款"
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
         android:padding="10dp">
 
         <TextView
-            android:text="2019-10-28  14:00"
+            tools:text="2019-10-28  14:00"
             android:id="@+id/tv_order_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +48,7 @@
             android:id="@+id/tv_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="订单号：2019102848100549"
+            tools:text="订单号：2019102848100549"
             android:layout_toStartOf="@id/tv_order_time"
             android:textColor="@color/grey73"
             android:textSize="11sp" />
@@ -62,7 +63,6 @@
         android:padding="15dp">
 
         <ImageView
-            android:src="@mipmap/sample"
             android:id="@+id/iv_shop"
             android:layout_width="80dp"
             android:layout_height="80dp" />
@@ -73,9 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_money"
+            android:layout_toLeftOf="@id/tv_num"
             android:layout_toRightOf="@id/iv_shop"
-            android:text="轻熟风垂感先手首要系带翻领双排扣过膝风衣外套女"
+            tools:text="轻熟风垂感先手首要系带翻领双排扣过膝风衣外套女"
             android:textColor="@color/light_black"
             android:textSize="12sp" />
         <TextView
@@ -85,21 +85,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/tv_money"
+            android:layout_toLeftOf="@id/tv_num"
             android:layout_toRightOf="@id/iv_shop"
             android:layout_below="@id/tv_title"
-            android:text="杏色；xs"
+            tools:text="杏色；xs"
             android:textColor="#B0B0B0"
             android:textSize="12sp" />
 
 
         <TextView
-            android:id="@+id/tv_money"
+            android:id="@+id/tv_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="X1件"
+            tools:text="X1件"
             android:textColor="@color/light_black"
             android:textSize="15sp" />
     </RelativeLayout>
@@ -126,7 +126,7 @@
             android:layout_toEndOf="@id/tv_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="共: 299.00元"
+            tools:text="共: 299.00元"
             android:textColor="@color/orange"
             android:textSize="15sp" />
         <TextView

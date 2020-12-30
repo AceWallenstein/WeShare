@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,23 +15,41 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.lxj.xpopup.core.BottomPopupView;
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.GoodsDetailBean;
+import com.pinnoocle.weshare.bean.GoodsSku;
+import com.pinnoocle.weshare.bean.ShoppingCartListBean;
+import com.pinnoocle.weshare.bean.SpecBean;
 import com.pinnoocle.weshare.mine.OrderConfirmActivity;
 import com.pinnoocle.weshare.mine.ShoppingCartActivity;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
+import com.pinnoocle.weshare.utils.FastData;
 import com.timmy.tdialog.TDialog;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.ResponseBody;
 import ren.qinc.numberbutton.NumberButton;
 
 public class DialogShopCar extends BottomPopupView implements View.OnClickListener {
@@ -41,14 +60,14 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
     private TextView tv_membership_price;
     private TextView tv_stock;
     private TextView tv_selected_num;
-    private TagFlowLayout flowlayout_size;
-    private TagFlowLayout flowlayout_color;
     private NumberButton numberButton;
     private TextView tv_buy;
     private TextView tv_add_shop_car;
     private boolean flag = false;
     private ImageView ivMark;
-    private  GoodsDetailBean.DataBean dataBean;
+    private GoodsDetailBean.DataBean dataBean;
+    private LinearLayout mSkuView;
+    private DataRepository dataRepository;
 
 
     public DialogShopCar(@NonNull Context context, FragmentManager fm, GoodsDetailBean.DataBean DataBean) {
@@ -67,18 +86,6 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         super.onCreate();
         initView();
         initListener();
-        List<String> mVals = new ArrayList<>();
-        Gson gson = new Gson();
-        GoodsDetailBean.DataBean.SpesDescBean spes_desc = dataBean.getSpes_desc();
-        String s = gson.toJson(spes_desc.get尺码1());
-        Log.d("-------------", s);
-        handleJson(mVals, s);
-        initTag(flowlayout_size, mVals, "尺寸");
-        List<String> mVals1 = new ArrayList<>();
-        String s1 = gson.toJson(spes_desc.get颜色());
-        Log.d("-------------", s1);
-        handleJson(mVals1,s1);
-        initTag(flowlayout_color, mVals1, "颜色");
 //assert numberButton != null;
         initNumberButton(numberButton);
     }
@@ -91,13 +98,13 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         // 内容 与 匹配规则 的测试
         Matcher matcher = pattern.matcher(s);
 
-        while ( matcher.find() ) {
+        while (matcher.find()) {
 //            // 包含前后的两个字符
 //            System.out.println(matcher.group());
             // 不包含前后的两个字符
             mVals.add(matcher.group(1));
         }
-        }
+    }
 
 
     private void initListener() {
@@ -117,22 +124,83 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
         tv_membership_price = findViewById(R.id.tv_membership_price);
         tv_stock = findViewById(R.id.tv_stock);
         tv_selected_num = findViewById(R.id.tv_selected_num);
-        flowlayout_size = findViewById(R.id.flowlayout_size);
-        flowlayout_color = findViewById(R.id.flowlayout_color);
         numberButton = findViewById(R.id.number_button);
         tv_buy = findViewById(R.id.tv_buy);
         tv_add_shop_car = findViewById(R.id.tv_add_shop_car);
         ivMark = findViewById(R.id.iv_mark);
+        mSkuView = findViewById(R.id.mSkuView);
 
         initData();
     }
 
-    // TODO: 2020/12/18 这里后端获取数据,已经提交了一个git版本
     private void initData() {
-        tv_price.setText("￥"+dataBean.getPrice()+"元");
-        tv_membership_price.setText("会员价："+dataBean.getCostprice());
-        tv_stock.setText(dataBean.getStock()+"");
+        tv_price.setText("￥" + dataBean.getPrice() + "元");
+        tv_membership_price.setText("会员价：" + dataBean.getCostprice());
+        tv_stock.setText(dataBean.getStock() + "");
         Glide.with(getContext()).load(dataBean.getImage_url()).centerCrop().into(iv_shop);
+        dataRepository = Injection.dataRepository(getContext());
+//        getProductInfo();
+        productInfo();
+
+    }
+
+    private void productInfo() {
+        String spes_desc = dataBean.getSpes_desc();
+        Log.d("------------", "productInfo: " + spes_desc);
+        try {
+            JSONObject jsonObject = new JSONObject(spes_desc);
+            Iterator<String> keys = jsonObject.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                List<String> list = new ArrayList<>();
+                JSONObject jsonObject1 = (JSONObject) jsonObject.get(key);
+                Iterator<String> keys1 = jsonObject1.keys();
+                if (keys1.hasNext()) {
+                    String key2 = keys1.next();
+                    String tag = (String) jsonObject1.getString(key2);
+                    list.add(tag);
+                }
+                SkuView skuView = new SkuView(getContext());
+                skuView.setSkuData(new GoodsSku(key, list));
+                mSkuView.addView(skuView);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getProductInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", FastData.getToken());
+        map.put("site_token", "123456");
+        map.put("method", "goods.getproductinfo");
+        map.put("id", dataBean.getProduct().getId() + "");
+        dataRepository.getProductInfo(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+//                Log.e("------------------", "onFailure: " + info);
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ResponseBody responseBody = (ResponseBody) data;
+                try {
+                    String spec = responseBody.string();
+                    JSONObject specObject = new JSONObject(spec);
+                    JSONArray jsonArray = specObject.getJSONArray("default_spes_desc");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject spes_item = (JSONObject) jsonArray.get(i);
+//
+//                    }
+//                    specObject.getJSONObject("")
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 
     private void initTag(TagFlowLayout flowLayout, List<String> mVals, String type) {
@@ -172,9 +240,11 @@ public class DialogShopCar extends BottomPopupView implements View.OnClickListen
     }
 
     private void initNumberButton(NumberButton numberButton) {
-        numberButton.setBuyMax(5)
-                .setInventory(6)
-                .setCurrentNumber(1)
+        numberButton.setCurrentNumber(1);
+        int buy_limit = dataBean.getBuy_limit();
+        int stock = dataBean.getStock();
+        numberButton.setBuyMax(buy_limit)
+                .setInventory(dataBean.getStock())
                 .setOnWarnListener(new NumberButton.OnWarnListener() {
                     @Override
                     public void onWarningForInventory(int inventory) {

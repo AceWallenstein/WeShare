@@ -11,7 +11,8 @@ import butterknife.ButterKnife;
  */
 public class AccountBalanceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
-        initTransparent();
+        //        initTransparent();
+        setThisStatusBarColor(R.drawable.gradient_color);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_account_balance);
         ButterKnife.bind(this);

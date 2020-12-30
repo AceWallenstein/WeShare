@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.GoodsBean;
-import com.pinnoocle.weshare.bean.RecommendBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
+public class GoodsAdapter extends BaseAdapter<GoodsBean.DataBean.ListBean, GoodsAdapter.VH> {
 
 
     public GoodsAdapter(Context mContext) {
@@ -35,16 +35,27 @@ public class GoodsAdapter extends BaseAdapter<GoodsBean, GoodsAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.tvGoodsTitle.setText(mDatas.get(position).getGoods_title());
-        holder.tvMemberPrice.setText("￥" + mDatas.get(position).getNonMembershipPrice());
-        holder.tvNonMemberPrice.setText("非会员￥" + mDatas.get(position).getMembershipPrice());
-        holder.tvPaymentNum.setText(mDatas.get(position).getPaymentsNum() + "人付款");
-//        Glide.with(mContext).load(Integer.parseInt(mDatas.get(position).getGoods_pic())) .into(holder.ivGoodsPic);
-        if (!TextUtils.isEmpty(mDatas.get(position).getGoods_pic()))
-            holder.ivGoodsPic.setImageResource(Integer.parseInt(mDatas.get(position).getGoods_pic()));
+        holder.tvGoodsTitle.setText(mDatas.get(position).getName());
+        holder.tvMemberPrice.setText("￥" + mDatas.get(position).getCostprice());
+        holder.tvNonMemberPrice.setText("非会员￥" + mDatas.get(position).getPrice());
+        holder.tvPaymentNum.setText(mDatas.get(position).getIs_buy_num() + "人付款");
+        Glide.with(mContext).load(mDatas.get(position).getImage_url()).fitCenter().into(holder.ivGoodsPic);
 
-        holder.itemView.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
-        holder.ivShopCar.setOnClickListener(v -> mOnItemClickListener.onItemViewClick(v, position));
+        holder.itemView.setOnClickListener(v ->
+        {
+            if (mOnItemDataClickListener != null) {
+                mOnItemDataClickListener.onItemViewClick(v, position,mDatas.get(position));
+            }
+        });
+        holder.ivShopCar.setOnClickListener(v -> {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemViewClick(v, position);
+            }
+            if (mOnItemDataClickListener != null) {
+                mOnItemDataClickListener.onItemViewClick(v, position,mDatas.get(position));
+            }
+        });
+
     }
 
     @Override

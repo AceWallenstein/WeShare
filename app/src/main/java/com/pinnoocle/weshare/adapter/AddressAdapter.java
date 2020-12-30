@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +50,8 @@ public class AddressAdapter extends BaseAdapter<UserShipBean.DataBean, AddressAd
             }
             holder.tvPhone.setText(sb.toString());
         }
-        holder.tvAddress.setText(mDatas.get(position).getAddress()+mDatas.get(position).getArea_name());
+        holder.checkBox.setChecked(mDatas.get(position).getIs_def()==1);//1表示默认地址
+        holder.tvAddress.setText(mDatas.get(position).getArea_name()+mDatas.get(position).getAddress());
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -61,6 +63,9 @@ public class AddressAdapter extends BaseAdapter<UserShipBean.DataBean, AddressAd
             }
         });
         holder.itemView.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v,position,mDatas.get(position)));
+        holder.ll_check.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v,position,mDatas.get(position)) );
+        holder.tvDelete.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v,position,mDatas.get(position)) );
+        holder.tvEdit.setOnClickListener(v -> mOnItemDataClickListener.onItemViewClick(v,position,mDatas.get(position)) );
     }
 
     @Override
@@ -83,6 +88,10 @@ public class AddressAdapter extends BaseAdapter<UserShipBean.DataBean, AddressAd
         TextView tvCheck;
         @BindView(R.id.tv_delete)
         TextView tvDelete;
+        @BindView(R.id.tv_edit)
+        TextView tvEdit;
+        @BindView(R.id.ll_check)
+        LinearLayout ll_check;
 
 
         public VH(@NonNull View itemView) {

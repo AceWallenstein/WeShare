@@ -113,35 +113,12 @@
                 android:src="@mipmap/close" />
         </RelativeLayout>
 
-        <TextView
-            android:paddingStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="尺寸"
-            android:textColor="@color/light_black"
-            android:textSize="12sp" />
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/flowlayout_size"
+        <LinearLayout
+            android:id="@+id/mSkuView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            zhy:max_select="1"></com.zhy.view.flowlayout.TagFlowLayout>
-
-        <TextView
-            android:paddingStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="颜色"
-            android:textColor="@color/light_black"
-            android:textSize="12sp" />
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/flowlayout_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            zhy:max_select="1"></com.zhy.view.flowlayout.TagFlowLayout>
+            android:orientation="vertical"
+            android:layout_margin="10dp"/>
 
         <TextView
             android:paddingStart="10dp"
@@ -152,6 +129,7 @@
             android:textSize="12sp" />
 
         <ren.qinc.numberbutton.NumberButton
+            android:layout_marginTop="10dp"
             android:paddingStart="10dp"
             app:buttonWidth="30dp"
             app:textWidth ="50dp"

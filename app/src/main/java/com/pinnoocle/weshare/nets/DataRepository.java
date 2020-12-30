@@ -50,8 +50,8 @@ public class DataRepository implements RemotDataSource {
     }
 
     @Override
-    public void spec(Map<String, String> queryMap, getCallback callback) {
-        mRemoteDataSource.spec(queryMap, callback);
+    public void getProductInfo(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getProductInfo(queryMap, callback);
 
     }
 
@@ -93,5 +93,75 @@ public class DataRepository implements RemotDataSource {
     @Override
     public void addCart(Map<String, String> queryMap, getCallback callback) {
         mRemoteDataSource.addCart(queryMap, callback);
+    }
+
+    @Override
+    public void setDefShip(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.setDefShip(queryMap, callback);
+
+    }
+
+    @Override
+    public void removeShip(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.removeShip(queryMap, callback);
+
+    }
+
+    @Override
+    public void getAreaId(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getAreaId(queryMap, callback);
+    }
+
+    @Override
+    public void getOrderStatusNum(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getOrderStatusNum(queryMap, callback);
+    }
+
+    @Override
+    public void UserPointLog(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.UserPointLog(queryMap, callback);
+
+    }
+
+    @Override
+    public void getGoodsList(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getGoodsList(queryMap, callback);
+
+    }
+
+    @Override
+    public void getTopCat(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getTopCat(queryMap, callback);
+
+    }
+
+    @Override
+    public void getChildCat(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getChildCat(queryMap, callback);
+
+    }
+
+    @Override
+    public void getUserInfo(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getUserInfo(queryMap, callback);
+
+    }
+
+    @Override
+    public void getOrderList(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.getOrderList(queryMap, callback);
+
+    }
+
+    @Override
+    public void orderDetails(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.orderDetails(queryMap, callback);
+
+    }
+
+    @Override
+    public void wxLogin(Map<String, String> queryMap, getCallback callback) {
+        mRemoteDataSource.wxLogin(queryMap, callback);
+
     }
 }

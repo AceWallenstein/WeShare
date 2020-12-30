@@ -18,11 +18,13 @@ import com.pinnoocle.weshare.bean.DeleteCartBean;
 import com.pinnoocle.weshare.bean.ShoppingCartListBean;
 import com.pinnoocle.weshare.bean.UpdateTotalPriceEvent;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.event.CanSettlement;
 import com.pinnoocle.weshare.event.CartAllCheckedEvent;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
 import com.pinnoocle.weshare.utils.ActivityUtils;
+import com.pinnoocle.weshare.utils.FastData;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +69,7 @@ public class ShoppingCartActivity extends BaseActivity {
     private ShopCartItemAdapter adapter;
     private List<ShoppingCartListBean.DataBean.ListBean> listBeans;
     private List<Integer> cartIdList;
+    private String cartIds;
 
     protected void onCreate(Bundle savedInstanceState) {
         initTransparent();
@@ -95,14 +98,18 @@ public class ShoppingCartActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
     public void onEvent(UpdateTotalPriceEvent event) {
         updateTotalPrice();
-        ToastUtils.showToast("价格更新了没");
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
+    public void onEvent(CanSettlement event) {
+        tvSettlement.setEnabled(event.canSettlement());
+    }
 
     private void initView() {
         adapter = new ShopCartItemAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
     }
 
     private void initData() {
@@ -113,7 +120,7 @@ public class ShoppingCartActivity extends BaseActivity {
     private void shoppingCartList() {
         ViewLoading.show(this);
         Map<String, String> map = new HashMap<>();
-        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("token", FastData.getToken());
         map.put("method", "cart.getlist");
         map.put("site_token", "123456");
         dataRepository.shoppingCartList(map, new RemotDataSource.getCallback() {
@@ -143,10 +150,10 @@ public class ShoppingCartActivity extends BaseActivity {
     private void deleteCart() {
         ViewLoading.show(this);
         Map<String, String> map = new HashMap<>();
-        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("token", FastData.getToken());
         map.put("method", "cart.del");
         map.put("site_token", "123456");
-//        map.put("ids",cartIdList );
+        map.put("ids", cartIds);
         dataRepository.deleteCart(map, new RemotDataSource.getCallback() {
             @Override
             public void onFailure(String info) {
@@ -176,7 +183,7 @@ public class ShoppingCartActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick({R.id.tv_cancel, R.id.ll_all_select, R.id.tv_settlement, R.id.tv_edit, R.id.tv_delete})
+    @OnClick({R.id.tv_cancel, R.id.ll_all_select, R.id.tv_settlement, R.id.tv_edit, R.id.tv_delete, R.id.tv_all_select})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -217,11 +224,35 @@ public class ShoppingCartActivity extends BaseActivity {
                 if (cartIdList.size() == 0) {
                     ToastUtils.showToast("请选择需要删除的数据");
                 } else {
+                    dealCartIdList();
                     deleteCart();
-                    break;
                 }
+                break;
+            case R.id.tv_all_select:
+                checkbox.setChecked(true);
+                for (ShoppingCartListBean.DataBean.ListBean listBean :
+                        adapter.getData()) {
+                    listBean.setIs_select(true);
+                }
+
+                updateTotalPrice();
+                adapter.notifyDataSetChanged();
+
+                break;
         }
 
+    }
+
+    private void dealCartIdList() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cartIdList.size(); i++) {
+            if (i == cartIdList.size() - 1) {
+                sb.append(cartIdList.get(i) + "");
+            } else {
+                sb.append(cartIdList.get(i) + ",");
+            }
+        }
+        cartIds = sb.toString();
     }
 
     private void refreshEditStatus() {
@@ -256,7 +287,8 @@ public class ShoppingCartActivity extends BaseActivity {
         }
         tvTotalPrice.setText("合计：" + doubleToString(totalPrice));
     }
-    public static String doubleToString(double num){
+
+    public static String doubleToString(double num) {
         //使用0.00不足位补0，#.##仅保留有效位
         return new DecimalFormat("0.00").format(num);
     }

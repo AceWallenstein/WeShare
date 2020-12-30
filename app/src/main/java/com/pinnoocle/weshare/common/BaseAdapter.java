@@ -37,11 +37,6 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyDataSetChanged();
     }
 
-    public void addAllData(List<T> mDatas) {
-        this.mDatas.addAll(mDatas);
-        notifyDataSetChanged();
-    }
-
 //    @Override
 //    public void onBindViewHolder(@NonNull VH holder, int position) {
 //        if (mOnItemClickListener != null) {

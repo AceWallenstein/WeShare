@@ -17,6 +17,7 @@ import com.pinnoocle.weshare.adapter.MainAdapter;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.message.MessageFragment;
 import com.pinnoocle.weshare.mine.MineFragment;
+import com.pinnoocle.weshare.utils.FastData;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 import com.pinnoocle.weshare.weshop.WeShopFragment;
 import com.pinnoocle.weshare.widget.NoScrollViewPager;
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         initTransparent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FastData.setToken("15ad776e1485a4cc527abd6069c25f41");// TODO: 2020/12/30 后面删除这行
         initBottomNavigationBar();
         initViewPager();
     }

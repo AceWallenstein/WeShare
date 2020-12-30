@@ -13,7 +13,8 @@ import butterknife.ButterKnife;
  */
 public class AvailableBalanceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
-        initTransparent();
+//        initTransparent();
+        setThisStatusBarColor(R.drawable.gradient_color);
         StatusBarUtil.StatusBarLightMode(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_available_balance);

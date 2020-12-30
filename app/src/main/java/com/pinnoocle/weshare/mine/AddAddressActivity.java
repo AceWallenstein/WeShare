@@ -1,7 +1,7 @@
 package com.pinnoocle.weshare.mine;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,23 +14,22 @@ import com.lljjcoder.bean.DistrictBean;
 import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citypickerview.CityPickerView;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopupext.listener.CityPickerListener;
-import com.lxj.xpopupext.popup.CityPickerPopup;
 import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.bean.AddressBean;
+import com.pinnoocle.weshare.bean.GetAreaIdBean;
 import com.pinnoocle.weshare.bean.SaveUserShipBean;
-import com.pinnoocle.weshare.bean.UserShipBean;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.event.AddAddressEvent;
 import com.pinnoocle.weshare.nets.DataRepository;
 import com.pinnoocle.weshare.nets.Injection;
 import com.pinnoocle.weshare.nets.RemotDataSource;
+import com.pinnoocle.weshare.utils.FastData;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -57,6 +56,9 @@ public class AddAddressActivity extends BaseActivity {
 
     CityPickerView mPicker = new CityPickerView();
     String area_id;
+    private String districtName;
+    private String cityName;
+    private String provinceName;
     private DataRepository dataRepository;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +79,20 @@ public class AddAddressActivity extends BaseActivity {
 
     private void initData() {
         dataRepository = Injection.dataRepository(this);
-        saveUserShip();
     }
 
     private void saveUserShip() {
+        if(TextUtils.isEmpty(area_id)){
+            return;
+        }
         ViewLoading.show(this);
         Map<String, String> map = new HashMap<>();
-        map.put("token", "b2fb4c51356d2087d859575b7e74cd4c");
+        map.put("token", FastData.getToken());
         map.put("method", "user.saveusership");
         map.put("site_token", "123456");
         map.put("area_id", area_id);
         map.put("user_name", edName.getText().toString());
-        map.put("detail_info", edArea.getText().toString().trim() + edAddress.getText().toString().trim());
+        map.put("detail_info", edAddress.getText().toString().trim());
         map.put("tel_number", edPhone.getText().toString());
         dataRepository.saveUserShip(map, new RemotDataSource.getCallback() {
             @Override
@@ -102,10 +106,34 @@ public class AddAddressActivity extends BaseActivity {
                 SaveUserShipBean saveUserShipBean = (SaveUserShipBean) data;
                 if (saveUserShipBean.isStatus()) {
                     ToastUtils.showToast(saveUserShipBean.getMsg());
+                    EventBus.getDefault().post(new AddAddressEvent());
                     finish();
                 }
 
 
+            }
+        });
+    }
+
+    private void getAreaId() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("method", "user.saveusership");
+        map.put("site_token", "123456");
+        map.put("city_name", cityName);
+        map.put("county_name", districtName);
+        map.put("province_name", provinceName);
+        dataRepository.getAreaId(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                GetAreaIdBean getAreaIdBean = (GetAreaIdBean) data;
+                if (getAreaIdBean.isStatus()) {
+                    area_id = String.valueOf(getAreaIdBean.getData());
+                }
             }
         });
     }
@@ -137,6 +165,7 @@ public class AddAddressActivity extends BaseActivity {
                         ToastUtils.showToast("手机号码格式不正确");
                     } else {
                         //保存地址到服务器
+//                        getAreaId();
                         saveUserShip();
                     }
                 }
@@ -167,8 +196,11 @@ public class AddAddressActivity extends BaseActivity {
         mPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
             @Override
             public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
-                edArea.setText(province.getName() + city.getName() + district.getName());
-                area_id = city.getId();
+                edArea.setText(province.getName()+" " + city.getName() +" "+ district.getName());
+                area_id = district.getId();
+                provinceName = province.getName();
+                cityName = city.getName();
+                districtName = district.getName();
                 //省份province
                 //城市city
                 //地区district

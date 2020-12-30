@@ -39,8 +39,10 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
         return mFragments.size();
     }
 
-//    @Override
-//    public CharSequence getPageTitle(int position) {
-//        return mTitles.get(position);
-//    }
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (mTitles != null && mTitles.size() > 0)
+            return mTitles.get(position);
+        return null;
+    }
 }

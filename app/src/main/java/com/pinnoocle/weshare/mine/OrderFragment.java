@@ -2,6 +2,7 @@ package com.pinnoocle.weshare.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.OrderAdapter;
 import com.pinnoocle.weshare.bean.OrderBean;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.common.Constants;
+import com.pinnoocle.weshare.event.GoodsSearchEvent;
+import com.pinnoocle.weshare.event.OrderSearchEvent;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
+import com.pinnoocle.weshare.utils.FastData;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,9 +45,11 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
     SmartRefreshLayout refresh;
     private int page = 1;
     private OrderAdapter orderAdapter;
-    private List<String> dataBeanList = new ArrayList<>();
+    private List<OrderBean.DataBean.ListBean> dataBeanList = new ArrayList<>();
     private Unbinder unbinder;
     private String type;
+    private DataRepository dataRepository;
+    private String keywords = "";
 
     public static OrderFragment newInstance(String type) {
 
@@ -58,8 +74,11 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
         View v = inflater.inflate(R.layout.fragment_order, container, false);
         unbinder = ButterKnife.bind(this, v);
         initView(v);
+        initData();
         return v;
     }
+
+
         /*
      titles.add("全部");
         titles.add("待付款");
@@ -75,68 +94,65 @@ public class OrderFragment extends Fragment implements OnRefreshLoadMoreListener
 //        dataRepository = Injection.dataRepository(getContext());
         recycleView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         orderAdapter = new OrderAdapter(getContext());
-        List<OrderBean> list = new ArrayList<>();
-        if (type.equals("全部")) {
-            for (int i = 0; i < 4; i++) {
-                list.add(new OrderBean(i));
-            }
-        } else if (type.equals("待付款")) {
-            list.add(new OrderBean(1));
-        } else if (type.equals("待发货")) {
-            list.add(new OrderBean(2));
-        } else if (type.equals("待收货")) {
-            list.add(new OrderBean(0));
-        } else if (type.equals("待评价")) {
-            list.add(new OrderBean(3));
-        } else if (type.equals("团购订单")) {
-        }
-
-        orderAdapter.setData(list);
+//        orderAdapter.setData(list);
         recycleView.setAdapter(orderAdapter);
-        orderAdapter.setmOnItemDataClickListener(new BaseAdapter.OnItemDataClickListener<OrderBean>() {
+        orderAdapter.setmOnItemDataClickListener(new BaseAdapter.OnItemDataClickListener<OrderBean.DataBean.ListBean>() {
             @Override
-            public void onItemViewClick(View view, int position, OrderBean o) {
-                int type = o.type;
+            public void onItemViewClick(View view, int position, OrderBean.DataBean.ListBean o) {
                 Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
-                intent.putExtra("type", type);
-////        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
+                intent.putExtra(Constants.ORDER_ID, o.getOrder_id());
                 startActivity(intent);
             }
         });
-
-//        order(page);
         refresh.setOnRefreshLoadMoreListener(this);
     }
 
-//    private void order(int page) {
-//        Map<String, String> map = new HashMap<>();
-//        map.put("wxapp_id", FastData.getWxAppId());
-//        map.put("shop_id", FastData.getShopId());
-//        map.put("page", page + "");
-//        map.put("status", "all");
-//        dataRepository.orderList(map, new RemotDataSource.getCallback() {
-//            @Override
-//            public void onFailure(String info) {
-//                refresh.finishRefresh();
-//                refresh.finishLoadMore();
-//            }
-//
-//            @Override
-//            public void onSuccess(Object data) {
-//                refresh.finishRefresh();
-//                OrderBean orderBean = (OrderBean) data;
-//                if (orderBean.getCode() == 1) {
+    private void initData() {
+        dataRepository = Injection.dataRepository(getContext());
+        order();
+    }
+
+    private void order() {
+        ViewLoading.show(getContext());
+        Map<String, String> map = new HashMap<>();
+        map.put("token", FastData.getToken());
+        map.put("method", "order.getorderlist");
+        map.put("site_token", "123456");
+        map.put("is_tqm", "1");
+        map.put("keywords", keywords);
+        map.put("status", type);
+        dataRepository.getOrderList(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(getContext());
+                refresh.finishRefresh();
+                refresh.finishLoadMore();
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(getContext());
+                refresh.finishRefresh();
+                OrderBean orderBean = (OrderBean) data;
+//                if (orderBean.isStatus()) {
 //                    if (orderBean.getData().getList().getCurrent_page() == orderBean.getData().getList().getLast_page()) {
 //                        refresh.finishLoadMoreWithNoMoreData();
 //                    } else {
 //                        refresh.finishLoadMore();
 //                    }
-//                    dataBeanList.addAll(orderBean.getData().getList().getData());
-//                    orderAdapter.setData(dataBeanList);
-//                }
-//            }
-//        });
-//    }
+                dataBeanList.addAll(orderBean.getData().getList());
+                orderAdapter.setData(dataBeanList);
+            }
+
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 100, sticky = false) //在ui线程执行，优先级为100
+    public void onEvent(OrderSearchEvent event) {
+        keywords = event.getSearchName();
+        dataBeanList.clear();
+        order();
+    }
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {

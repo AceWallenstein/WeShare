@@ -10,11 +10,20 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.pedaily.yc.ycdialoglib.dialog.loading.ViewLoading;
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.adapter.OrderConfirmAdapter;
-import com.pinnoocle.weshare.bean.OrderBean;
+import com.pinnoocle.weshare.adapter.OrderItemAdapter;
+import com.pinnoocle.weshare.bean.OrderDetailsBean;
 import com.pinnoocle.weshare.common.BaseActivity;
+import com.pinnoocle.weshare.common.Constants;
+import com.pinnoocle.weshare.nets.DataRepository;
+import com.pinnoocle.weshare.nets.Injection;
+import com.pinnoocle.weshare.nets.RemotDataSource;
+import com.pinnoocle.weshare.utils.FastData;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +80,8 @@ public class OrderDetailsActivity extends BaseActivity {
     TextView tvGoBuy;
     @BindView(R.id.rl_pay)
     RelativeLayout rl_pay;
-    private OrderConfirmAdapter orderAdapter;
+    private OrderItemAdapter orderItemAdapter;
+    private DataRepository dataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +91,9 @@ public class OrderDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_order_details);
         ButterKnife.bind(this);
         initView();
+        initData();
     }
+
 
     /*
 
@@ -97,9 +109,57 @@ public class OrderDetailsActivity extends BaseActivity {
      */
     private void initView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        orderAdapter = new OrderConfirmAdapter(this);
-        recyclerView.setAdapter(orderAdapter);
-        int type = getIntent().getIntExtra("type", 1);
+        orderItemAdapter = new OrderItemAdapter(this);
+        recyclerView.setAdapter(orderItemAdapter);
+
+
+    }
+
+    private void initData() {
+        dataRepository = Injection.dataRepository(this);
+        orderDetails();
+    }
+
+    private void orderDetails() {
+        ViewLoading.show(this);
+        Map<String, String> map = new HashMap<>();
+        map.put("token", FastData.getToken());
+        map.put("method", "order.details");
+        map.put("site_token", "123456");
+        map.put("order_id", getIntent().getStringExtra(Constants.ORDER_ID));
+        dataRepository.orderDetails(map, new RemotDataSource.getCallback() {
+            @Override
+            public void onFailure(String info) {
+                ViewLoading.dismiss(OrderDetailsActivity.this);
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                ViewLoading.dismiss(OrderDetailsActivity.this);
+                OrderDetailsBean orderDetailsBean = (OrderDetailsBean) data;
+                if (orderDetailsBean.isStatus()) {
+                    int type = orderDetailsBean.getData().getOrder_type();
+                    dealOrderType(type);
+                    tvName.setText(orderDetailsBean.getData().getShip_name());
+                    tvPhone.setText(orderDetailsBean.getData().getShip_mobile());
+                    tvAddress.setText(orderDetailsBean.getData().getShip_area_name().trim()+orderDetailsBean.getData().getShip_address().trim());
+                    orderItemAdapter.setData(orderDetailsBean.getData().getItems());
+                    tvNum.setText("共计"+orderDetailsBean.getData().getItems().size()+"件商品，合计:");
+                    tvMoney.setText("￥"+orderDetailsBean.getData().getGoods_amount());
+                    tvTotalMoney.setText("￥"+orderDetailsBean.getData().getGoods_amount());
+                    tvDeliveryFee.setText("￥"+orderDetailsBean.getData().getCost_freight());
+                    tvCoupons.setText("￥"+orderDetailsBean.getData().getCoupon_pmt());
+                    tvPayMode.setText(orderDetailsBean.getData().getPayment_name());
+                    tvPayMoney.setText("￥"+orderDetailsBean.getData().getOrder_amount());
+
+                }
+
+
+            }
+        });
+    }
+
+    private void dealOrderType(int type) {
         if (type == 1) {
         } else if (type == 2) {
             tvOrderState.setText("已付款，待发货");

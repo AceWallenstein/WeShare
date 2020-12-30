@@ -62,35 +62,13 @@
                     android:textSize="14sp" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_menus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rl_search"
-                android:gravity="center_vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/iv_menu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/more_menu" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_menus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/iv_menu"
-                    android:overScrollMode="never" />
-            </RelativeLayout>
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollview"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/rl_menus">
+                android:layout_below="@+id/rl_search">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,13 +83,219 @@
                         android:layout_marginTop="10dp"
                         android:background="@color/white" />
 
+                    <RelativeLayout
+                        android:id="@+id/rl_menus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl_search"
+                        android:gravity="center_vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/iv_menu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/more_menu"
+                            android:visibility="gone" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_menus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toStartOf="@id/iv_menu"
+                            android:overScrollMode="never" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_marginStart="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/horn" />
+
+                        <com.sunfusheng.marqueeview.MarqueeView
+                            android:id="@+id/marqueeView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_weight="1"
+                            android:text="用户月公告"
+                            app:mvAnimDuration="1000"
+                            app:mvSingleLine="true"
+                            app:mvTextColor="#333333"
+                            app:mvTextSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="0.5dp"
+                            app:cardCornerRadius="6dp"
+                            app:cardElevation="0dp">
+
+                            <RelativeLayout
+                                android:id="@+id/rl_group_skill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/iv_picture"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dp"
+                                   />
+
+                                <TextView
+                                    android:padding="5dp"
+                                    android:id="@+id/tv_type"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_type"
+                                    android:textColor="@color/white"
+                                    android:textSize="12sp"
+                                    android:text="团抢秒杀" />
+
+                                <TextView
+                                    android:padding="5dp"
+                                    android:id="@+id/tv_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignEnd="@id/iv_picture"
+                                    android:layout_alignBottom="@id/iv_picture"
+                                    android:background="@drawable/bg_type"
+                                    android:textColor="@color/white"
+                                    android:textSize="10sp"
+                                    tools:text="1212" />
+
+                            </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <LinearLayout
+                            android:layout_marginStart="15dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardView1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_margin="0.5dp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="6dp"
+                                app:cardElevation="0dp">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                    <ImageView
+                                        android:id="@+id/iv_picture1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                       />
+
+                                    <TextView
+                                        android:id="@+id/tv_type1"
+                                        android:textSize="12sp"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_type"
+                                        android:textColor="@color/white"
+                                        android:text="即将团抢" />
+
+                                    <TextView
+                                        android:id="@+id/tv_time1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignEnd="@id/iv_picture1"
+                                        android:layout_alignBottom="@id/iv_picture1"
+                                        android:background="@drawable/bg_type"
+                                        android:textColor="@color/white"
+                                        android:textSize="12sp"
+                                        tools:text="3124124124231" />
+
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp"/>
+                            <androidx.cardview.widget.CardView
+                                android:layout_marginStart="10dp"
+                                android:id="@+id/cardView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_margin="0.5dp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="6dp"
+                                app:cardElevation="0dp">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content">
+
+                                    <ImageView
+                                        android:src="@mipmap/deletepic"
+                                        android:id="@+id/iv_picture2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                         />
+
+                                    <TextView
+                                        android:textSize="12sp"
+                                        android:textColor="@color/white"
+                                        android:id="@+id/tv_type2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_type"
+                                        android:text="0元抽奖" />
+
+                                    <TextView
+                                        android:id="@+id/tv_time2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignEnd="@id/iv_picture2"
+                                        android:layout_alignBottom="@id/iv_picture2"
+                                        android:background="@drawable/bg_type"
+                                        android:textColor="@color/white"
+                                        android:textSize="12sp"
+                                        android:text="12314人参与" />
+
+                                </RelativeLayout>
+                            </androidx.cardview.widget.CardView>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                     <com.pinnoocle.weshare.widget.TagsGridView
                         android:id="@+id/gridView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:gravity="center"
-                        android:numColumns="4" />
+                        android:numColumns="4"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -119,7 +303,8 @@
                         android:layout_marginTop="10dp"
                         android:background="@mipmap/bg_recommend"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:padding="10dp"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/rl_recommend"
@@ -170,21 +355,37 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:layout_toEndOf="@id/iv_best_sellers"
                                 android:id="@+id/tv_favorite"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:text="猜你喜欢"
-                                android:textColor="@color/juice"
+                                android:text="热卖推荐"
+                                android:textStyle="bold"
+                                android:textColor="#333333"
                                 android:textSize="15sp" />
 
                             <ImageView
+                                android:id="@+id/iv_best_sellers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:src="@mipmap/icon_best_sellers" />
+                            <TextView
+                                android:layout_toStartOf="@id/iv_more"
+                                android:id="@+id/tv_more"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="#333333"
                                 android:layout_centerVertical="true"
-                                android:layout_marginEnd="5dp"
-                                android:layout_toStartOf="@id/tv_favorite"
-                                android:src="@mipmap/favorite" />
+                                android:text="更多热卖"/>
+                            <ImageView
+                                android:layout_centerVertical="true"
+                                android:id="@+id/iv_more"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginStart="5dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@mipmap/more_right"/>
+
                         </RelativeLayout>
 
 
@@ -203,7 +404,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="440dp"
+                android:layout_marginTop="420dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginBottom="14dp"
                 app:sl_cornerRadius="68dp"
@@ -223,13 +424,13 @@
             </com.dd.ShadowLayout>
 
             <com.dd.ShadowLayout
-                android:visibility="gone"
                 android:id="@+id/fab_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fab_shop_car"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="6dp"
+                android:visibility="gone"
                 app:sl_cornerRadius="68dp"
                 app:sl_dx="0dp"
                 app:sl_dy="0dp"

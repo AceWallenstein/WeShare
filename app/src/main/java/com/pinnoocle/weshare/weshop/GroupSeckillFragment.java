@@ -119,7 +119,6 @@ public class GroupSeckillFragment extends Fragment implements OnRefreshLoadMoreL
 
     @Override
     public void onItemViewClick(View view, int position) {
-        Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
 //        intent.putExtra("order_id", dataBeanList.get(position).getOrder_id() + "");
 //        startActivity(intent);
     }

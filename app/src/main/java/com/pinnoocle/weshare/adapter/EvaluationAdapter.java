@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
-import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
 import com.pinnoocle.weshare.common.BaseAdapter;
 
 import butterknife.ButterKnife;
 
-public class EvaluationAdapter extends BaseAdapter<GoodsBean, EvaluationAdapter.VH> {
+public class EvaluationAdapter extends BaseAdapter<GoodsBeanDelete, EvaluationAdapter.VH> {
 
 
 

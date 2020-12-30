@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.adapter.CollectionAdapter;
-import com.pinnoocle.weshare.bean.GoodsBean;
+import com.pinnoocle.weshare.bean.GoodsBeanDelete;
 import com.pinnoocle.weshare.common.BaseActivity;
 import com.pinnoocle.weshare.utils.StatusBarUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -53,12 +53,12 @@ public class MyCollectionActivity extends BaseActivity {
     }
 
     private void initData() {
-        GoodsBean goodsBean = new GoodsBean("轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女", "14.50", "15.51", "", "172", "120");
-        List<GoodsBean> list = new ArrayList<>();
-        list.add(goodsBean);
-        list.add(goodsBean);
-        list.add(goodsBean);
-        list.add(goodsBean);
+        GoodsBeanDelete goodsBeanDelete = new GoodsBeanDelete("轻熟风chic树莓色垂感先手首要系带翻领双排扣过膝风衣外套女", "14.50", "15.51", "", "172", "120");
+        List<GoodsBeanDelete> list = new ArrayList<>();
+        list.add(goodsBeanDelete);
+        list.add(goodsBeanDelete);
+        list.add(goodsBeanDelete);
+        list.add(goodsBeanDelete);
         adapter.setData(list);
     }
 

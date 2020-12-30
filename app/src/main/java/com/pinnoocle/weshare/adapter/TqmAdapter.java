@@ -19,7 +19,7 @@ import com.pinnoocle.weshare.common.BaseAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TqmAdapter extends BaseAdapter<HomeBean.DataBeanXX.TqmListBean.DataBeanX, TqmAdapter.VH> {
+public class TqmAdapter extends BaseAdapter<HomeBean.DataBeanXX.TqmListBean.DataBean, TqmAdapter.VH> {
 
     public TqmAdapter(Context mContext) {
         super(mContext);

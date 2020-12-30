@@ -54,12 +54,14 @@
         android:padding="10dp">
 
         <LinearLayout
+            android:id="@+id/ll_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/cb_check"
+                android:clickable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/check_mark_selector_1"
@@ -79,6 +81,7 @@
 
 
         <TextView
+            android:id="@+id/tv_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

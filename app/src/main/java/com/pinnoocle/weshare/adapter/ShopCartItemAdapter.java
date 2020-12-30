@@ -1,6 +1,7 @@
 package com.pinnoocle.weshare.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -11,17 +12,22 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.pedaily.yc.ycdialoglib.toast.ToastUtils;
 import com.pinnoocle.weshare.R;
 import com.pinnoocle.weshare.bean.ShoppingCartListBean;
 import com.pinnoocle.weshare.bean.UpdateTotalPriceEvent;
 import com.pinnoocle.weshare.common.BaseAdapter;
+import com.pinnoocle.weshare.common.Constants;
+import com.pinnoocle.weshare.event.CanSettlement;
 import com.pinnoocle.weshare.event.CartAllCheckedEvent;
+import com.pinnoocle.weshare.weshop.GoodsDetailActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,20 +62,30 @@ public class ShopCartItemAdapter extends BaseAdapter<ShoppingCartListBean.DataBe
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mDatas.get(position).setIs_select(holder.mCheckedCb.isChecked());
                 final boolean isAllChecked = isAllchecked(holder, position);
+                isOnechecked(holder, position);
                 EventBus.getDefault().post(new CartAllCheckedEvent(isAllChecked));
             }
         });
+        holder.rl_item.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+            intent.putExtra(Constants.ID, mDatas.get(position).getProducts().getGoods_id() + "");
+            mContext.startActivity(intent);
+        });
+        int buy_limit = mDatas.get(position).getProducts().getBuy_limit();
+        int stock = mDatas.get(position).getProducts().getStock();
         holder.mGoodsCountBtn
-//        .setBuyMax(mDatas.get(position).getProducts().getBuy_limit())
-//                .setInventory(mDatas.get(position).getProducts().getStock())
+//                .setBuyMax(buy_limit)
                 .setCurrentNumber(mDatas.get(position).getNums());
+//                .setInventory(stock)
 //                .setOnWarnListener(new NumberButton.OnWarnListener() {
 //                    @Override
 //                    public void onWarningForInventory(int inventory) {
+//                        ToastUtils.showToast("当前库存:" + inventory);
 //                    }
 //
 //                    @Override
 //                    public void onWarningForBuyMax(int buyMax) {
+//                        ToastUtils.showToast("超过最大购买数:" + buyMax);
 //                    }
 //                });
         EditText text_count = holder.mGoodsCountBtn.findViewById(R.id.text_count);
@@ -86,7 +102,7 @@ public class ShopCartItemAdapter extends BaseAdapter<ShoppingCartListBean.DataBe
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(TextUtils.isEmpty(s))
+                if (TextUtils.isEmpty(s))
                     return;
                 mDatas.get(position).setNums(Integer.parseInt(s.toString()));
                 EventBus.getDefault().post(new UpdateTotalPriceEvent());
@@ -102,6 +118,16 @@ public class ShopCartItemAdapter extends BaseAdapter<ShoppingCartListBean.DataBe
             }
         }
         return true;
+    }
+
+    private void isOnechecked(@NonNull VH holder, int position) {
+        for (int i = 0; i < mDatas.size(); i++) {
+            if (mDatas.get(i).isIs_select()) {
+                EventBus.getDefault().post(new CanSettlement(true));
+                return;
+            }
+        }
+        EventBus.getDefault().post(new CanSettlement(false));
     }
 
 
@@ -124,6 +150,8 @@ public class ShopCartItemAdapter extends BaseAdapter<ShoppingCartListBean.DataBe
         TextView mGoodsPriceTv;
         @BindView(R.id.mGoodsCountBtn)
         NumberButton mGoodsCountBtn;
+        @BindView(R.id.rl_item)
+        RelativeLayout rl_item;
 
         public VH(@NonNull View itemView) {
             super(itemView);

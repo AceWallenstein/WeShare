@@ -1,6 +1,8 @@
 package com.pinnoocle.weshare.bean;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.pinnoocle.weshare.adapter.RawStringJsonAdapter;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class GoodsDetailBean {
          * bn : G6082714575561
          * name : 【雪尼尔加厚水貂绒休闲老爹裤】女装显瘦款灯芯绒加厚休闲烟管裤
          * brief : 不免邮区域:海外,台湾,澳门,
-         香港,西藏,新疆,宁夏,青海,内蒙古
+         * 香港,西藏,新疆,宁夏,青海,内蒙古
          * price : 55.00
          * costprice : 52.00
          * mktprice : 0.00
@@ -116,7 +118,9 @@ public class GoodsDetailBean {
         private String weight;
         private String unit;
         private String intro;
-        private SpesDescBean spes_desc;
+        @SerializedName("spes_desc")
+        @JsonAdapter(RawStringJsonAdapter.class)
+        private String spes_desc;
         private String params;
         private int comments_count;
         private int view_count;
@@ -291,11 +295,11 @@ public class GoodsDetailBean {
             this.intro = intro;
         }
 
-        public SpesDescBean getSpes_desc() {
+        public String getSpes_desc() {
             return spes_desc;
         }
 
-        public void setSpes_desc(SpesDescBean spes_desc) {
+        public void setSpes_desc(String spes_desc) {
             this.spes_desc = spes_desc;
         }
 
@@ -1258,7 +1262,7 @@ public class GoodsDetailBean {
             private String bn;
             private String image_path;
             private int total_stock;
-            private GradeInfoBean grade_info;
+            private List<GradeInfoBean> grade_info;
             private DefaultSpesDescBeanX default_spes_desc;
             private String amount;
             private int promotion_amount;
@@ -1409,11 +1413,11 @@ public class GoodsDetailBean {
                 this.total_stock = total_stock;
             }
 
-            public GradeInfoBean getGrade_info() {
+            public List<GradeInfoBean> getGrade_info() {
                 return grade_info;
             }
 
-            public void setGrade_info(GradeInfoBean grade_info) {
+            public void setGrade_info(List<GradeInfoBean> grade_info) {
                 this.grade_info = grade_info;
             }
 

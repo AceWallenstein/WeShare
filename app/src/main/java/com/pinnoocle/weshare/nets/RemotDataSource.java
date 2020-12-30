@@ -28,7 +28,7 @@ public interface RemotDataSource {
 
     void goodsDetail(Map<String, String> queryMap, getCallback callback);
 
-    void spec(Map<String, String> queryMap, getCallback callback);
+    void getProductInfo(Map<String, String> queryMap, getCallback callback);
 
     void goodsEvaluation(Map<String, String> queryMap, getCallback callback);
 
@@ -43,5 +43,28 @@ public interface RemotDataSource {
     void saveUserShip(Map<String, String> queryMap, getCallback callback);
 
     void addCart(Map<String, String> queryMap, getCallback callback);
+
+    void setDefShip(Map<String, String> queryMap, getCallback callback);
+
+    void removeShip(Map<String, String> queryMap, getCallback callback);
+
+    void getAreaId(Map<String, String> queryMap, getCallback callback);
+
+    void getOrderStatusNum(Map<String, String> queryMap, getCallback callback);
+
+    void UserPointLog(Map<String, String> queryMap, getCallback callback);
+
+    void getGoodsList(Map<String, String> queryMap, getCallback callback);
+
+    void getTopCat(Map<String, String> queryMap, getCallback callback);
+
+    void getChildCat(Map<String, String> queryMap, getCallback callback);
+
+    void getUserInfo(Map<String, String> queryMap, getCallback callback);
+
+    void getOrderList(Map<String, String> queryMap, getCallback callback);
+
+    void orderDetails(Map<String, String> queryMap, getCallback callback);
+    void wxLogin(Map<String, String> queryMap, getCallback callback);
 
 }
